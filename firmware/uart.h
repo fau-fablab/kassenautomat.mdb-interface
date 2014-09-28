@@ -26,6 +26,14 @@
 #ifndef _HAVE_LIB_IO_SERIAL_UART_H
 #define _HAVE_LIB_IO_SERIAL_UART_H
 
+#ifndef PE0
+#define PE0 UPE0
+#endif
+
+#ifndef PE1
+#define PE1 UPE1
+#endif
+
 #include "./io.h"
 #include <avr/pgmspace.h>
 
