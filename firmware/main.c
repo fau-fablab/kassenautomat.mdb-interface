@@ -32,7 +32,7 @@ void fatal_real(const char * PROGMEM str, uint8_t d);
 
 #define LED_DDR DDRB				// Hier DDR der Test-LED einstellen!
 #define LED_PORT PORTB				// Hier PORT der Test-LED einstellen!
-#define LED_PIN PB7				// Hier PIN der Test-LED einstellen!
+#define LED_PIN PB0				// Hier PIN der Test-LED einstellen!
 #define LED(x) out(LED_PORT,LED_PIN,0,x)	// DO NOT CHANGE
 
 
