@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name "Rectifier KBU8")(type Legacy)(uri ${KIPRJMOD}/Bridge_KBU8/Bridge_KBU8.mod)(options "")(descr "Footprint für Gleichrichter"))
+  (lib (name "Mainboard MOSFET")(type KiCad)(uri ${KIPRJMOD}/MAINBRD_MOSFET.pretty)(options "")(descr ""))
+)
