@@ -88,8 +88,8 @@ int main(void) {
 //	OSCCAL = 0b01101001;			// kalibriere auf 9,6MHz
 	uart0_init();//(38400,1,1);
 	uart1_init();
-	DDRD |= (1<<PD3);
-	DDRE |= (1<<PE1);
+	// UART DDRs:
+	DDRD |= (1<<PD3) | (1<<PD1);
 	databufReset(&cmd);
 	databufReset(&resp);
 	// erstmal ein byte senden, damit txReady funktioniert
