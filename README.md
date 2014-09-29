@@ -20,3 +20,8 @@ Programmieren
 Sicherung 12V-Schiene
 ---------------------
   * im worst case sollte eine 5A mtltrg. Sicherung für die 12V-Schiene reichen
+  
+Fundgrube
+---------
+  * http://www.engbedded.com/fusecalc/
+  * Wenn die Fuses auf ext gesetzt sind, läuft der Chip nur, solange kein USB suspend ist - screen offen halten!
