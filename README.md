@@ -16,3 +16,7 @@ Programmieren
 -------------
   * Wenn der Chip in Auslieferungszustand ist, sollte B8 oder B9 bei avrdude eingestellt werden
   * Bei konfigurierter Taktquelle kann auch mehr Geschwindigkeit eingesetzt werden
+  
+Sicherung 12V-Schiene
+---------------------
+  * im worst case sollte eine 5A mtltrg. Sicherung für die 12V-Schiene reichen
