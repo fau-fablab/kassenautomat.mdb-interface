@@ -24,4 +24,10 @@ Sicherung 12V-Schiene
 Fundgrube
 ---------
   * http://www.engbedded.com/fusecalc/
-  * Wenn die Fuses auf ext gesetzt sind, läuft der Chip nur, solange kein USB suspend ist - screen offen halten!
+  * Wenn die Fuses auf externen Takt gesetzt sind, läuft der Chip nur, solange kein USB suspend ist - screen offen halten!
+
+Aktueller Stand Platine
+-----------------------
+  * Serial-Loopback-Test erfolgreich - auf der seriellen Konsole kommt was raus, wenn man RX und TX verbindet
+  * RX- und TX-LEDs am FT232RL gehen nicht (TM)
+  * UART am AVR mag auch nich nicht (scheint noch falsch konfiguriert zu sein, mit ungelöschtem Chip stört er die RX/TX des FT232RL sodass nichts mehr durchkommt)

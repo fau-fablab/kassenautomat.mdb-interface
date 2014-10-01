@@ -81,30 +81,48 @@ uint8_t hexNibbleToAscii(uint8_t x) {
 	}
 }
 
+//TODO sauber initialisieren
+
 int main(void) {
-	wdt_enable(WDTO_120MS);
+  	//wdt_enable(WDTO_120MS);
+        wdt_enable(WDTO_2S); //zum testen TODO
 	
 	LED_DDR |= (1<<LED_PIN); 		// setting LED-PIN to output
+        LED_DDR |= (1<<PB1);
+        LED_PORT |= (1<<PB1);
+        LED_PORT |= (1<<LED_PIN);
+        delayms(10);
+        LED_PORT &= ~(1<<LED_PIN);
+        LED_PORT &= ~(1<<PB1);
+        
 //	OSCCAL = 0b01101001;			// kalibriere auf 9,6MHz
 	uart0_init();//(38400,1,1);
 	uart1_init();
+        
 	// UART DDRs:
 	DDRD |= (1<<PD3) | (1<<PD1);
+        
 	databufReset(&cmd);
 	databufReset(&resp);
+        
 	// erstmal ein byte senden, damit txReady funktioniert
 	uart0_tx('\n');
 	uart1_tx(0xFF,1);
-	uart0_tx_pstr(PSTR("INFO:booting\n"));
-	while(1) {				// Testcode: LED-Blinker mit 10Hz
+	uart0_tx_pstr(PSTR("INFO:booting\n"));     
+	
+        while(1) {
+                // Testcode: LED-Blinker mit 10Hz
 		wdt_reset();
-		LED_PORT &= ~(1<<LED_PIN);
-		switch (state) {
+                delayms(10);
+                LED_PORT &= ~(1<<LED_PIN);
+                LED_PORT &= ~(1<<PB1);
+                delayms(10);
+                switch (state) {
 			case READ_CMD: // get command from PC
-				LED_PORT |= (1<<LED_PIN);
 				if (uart0_rx_ready()) {
+                                  LED_PORT |= (1<<LED_PIN);
 					uint8_t d=uart0_rx();
-					//uart0_tx_blocking(d);
+					uart0_tx_blocking(d); // TODO nur test, wieder auskommentieren
 					if (d=='\r' || d=='\n') {
 						state=SEND_CMD;
 						cmdBytesSent=0;
@@ -114,6 +132,7 @@ int main(void) {
 				}
 				break;
 			case SEND_CMD: // send command to device
+                                LED_PORT |= (1<<PB1);
 				if (uart0_rx_ready() || uart1_rx_ready()) {
 					FATAL("rx while SEND CMD");
 				}
