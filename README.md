@@ -20,3 +20,9 @@ Programmieren
 Sicherung 12V-Schiene
 ---------------------
   * im worst case sollte eine 5A mtltrg. Sicherung für die 12V-Schiene reichen
+
+Aktueller Stand Platine
+-----------------------
+  * Serial-Loopback-Test erfolgreich - auf der seriellen Konsole kommt was raus, wenn man RX und TX verbindet
+  * RX- und TX-LEDs am FT232RL gehen nicht (TM)
+  * UART am AVR mag auch nich nicht (scheint noch falsch konfiguriert zu sein, mit ungelöschtem Chip stört er die RX/TX des FT232RL sodass nichts mehr durchkommt)
