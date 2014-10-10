@@ -38,11 +38,11 @@ void fatal_real(const char * PROGMEM str, uint8_t d);
 
 uint8_t hexNibbleToAscii(uint8_t x);
 void fatal_real(const char * PROGMEM str, uint8_t d) {
-	uart0_tx_pstr(PSTR("\nFATAL: "));
-	uart0_tx_pstr(str);
-	uart0_tx_blocking(hexNibbleToAscii(d>>4));
-	uart0_tx_blocking(hexNibbleToAscii(d&0xF));
-	uart0_tx_blocking('\n');
+	uartPC_tx_pstr(PSTR("\nFATAL: "));
+	uartPC_tx_pstr(str);
+	uartPC_tx_blocking(hexNibbleToAscii(d>>4));
+	uartPC_tx_blocking(hexNibbleToAscii(d&0xF));
+	uartPC_tx_blocking('\n');
 	while (1) {}
 }
 
@@ -85,19 +85,33 @@ uint8_t hexNibbleToAscii(uint8_t x) {
 
 int main(void) {
   	//wdt_enable(WDTO_120MS);
-        wdt_enable(WDTO_2S); //zum testen TODO
-	
+        // wdt_enable(WDTO_2S); //zum testen TODO
 	LED_DDR |= (1<<LED_PIN); 		// setting LED-PIN to output
-        LED_DDR |= (1<<PB1);
-        LED_PORT |= (1<<PB1);
-        LED_PORT |= (1<<LED_PIN);
-        delayms(10);
-        LED_PORT &= ~(1<<LED_PIN);
-        LED_PORT &= ~(1<<PB1);
+	LED_PORT |= (1<<LED_PIN);
+// 	while (1) {
+// 		LED_DDR |= (1<<PB1);
+// 		LED_PORT |= (1<<PB1);
+// 		delayms(100);
+// 		LED_PORT &= ~(1<<LED_PIN);
+// 		LED_PORT &= ~(1<<PB1);
+// 		delayms(100);
+// 	}
         
 //	OSCCAL = 0b01101001;			// kalibriere auf 9,6MHz
-	uart0_init();//(38400,1,1);
-	uart1_init();
+	uartPC_init();//(38400,1,1);
+	uartBus_init();
+	
+	while(1) {
+		uartPC_tx_str("Deine Mutter");
+		delayms(100);
+		/*
+		if (uartPC_rx_ready()) {
+			LED_PORT &= ~(1<<LED_PIN);
+			delayms(100);
+			LED_PORT |= (1<<LED_PIN);
+			uartPC_tx(uartPC_rx());
+		}*/
+	}
         
 	// UART DDRs:
 	DDRD |= (1<<PD3) | (1<<PD1);
@@ -106,9 +120,9 @@ int main(void) {
 	databufReset(&resp);
         
 	// erstmal ein byte senden, damit txReady funktioniert
-	uart0_tx('\n');
-	uart1_tx(0xFF,1);
-	uart0_tx_pstr(PSTR("INFO:booting\n"));     
+	uartPC_tx('\n');
+	uartBus_tx(0xFF,1);
+	uartPC_tx_pstr(PSTR("INFO:booting\n"));     
 	
         while(1) {
                 // Testcode: LED-Blinker mit 10Hz
@@ -119,10 +133,10 @@ int main(void) {
                 delayms(10);
                 switch (state) {
 			case READ_CMD: // get command from PC
-				if (uart0_rx_ready()) {
+				if (uartPC_rx_ready()) {
                                   LED_PORT |= (1<<LED_PIN);
-					uint8_t d=uart0_rx();
-					uart0_tx_blocking(d); // TODO nur test, wieder auskommentieren
+					uint8_t d=uartPC_rx();
+					uartPC_tx_blocking(d); // TODO nur test, wieder auskommentieren
 					if (d=='\r' || d=='\n') {
 						state=SEND_CMD;
 						cmdBytesSent=0;
@@ -133,17 +147,17 @@ int main(void) {
 				break;
 			case SEND_CMD: // send command to device
                                 LED_PORT |= (1<<PB1);
-				if (uart0_rx_ready() || uart1_rx_ready()) {
+				if (uartPC_rx_ready() || uartBus_rx_ready()) {
 					FATAL("rx while SEND CMD");
 				}
-				if (uart1_tx_ready()) {
+				if (uartBus_tx_ready()) {
 					if (hasData(&cmd)) {
 						uint8_t firstNibble=readData(&cmd);
 						if (!hasData(&cmd)) {
 							FATAL("missing second nibble");
 						}
 						// send databyte. set bit8 if it is the first byte
-						uart1_tx(asciiToHex(firstNibble,readData(&cmd)), (cmdBytesSent==0));
+						uartBus_tx(asciiToHex(firstNibble,readData(&cmd)), (cmdBytesSent==0));
 						cmdBytesSent++;
 					} else {
 						databufReset(&cmd);
@@ -158,12 +172,12 @@ int main(void) {
 				}
 				break;
 			case READ_RESP: // receive response from device, send ACK
-				if (uart0_rx_ready()) {
+				if (uartPC_rx_ready()) {
 					FATAL("rx0 while READ RESP");
 				}
-				if (uart1_rx_ready()) {
+				if (uartBus_rx_ready()) {
 					timeout=0;
-					uint16_t d=uart1_rx();
+					uint16_t d=uartBus_rx();
 					respLen++;
 					storeData(&resp,hexNibbleToAscii((d&0xF0) >> 4));
 					storeData(&resp,hexNibbleToAscii(d & 0x0F));
@@ -190,7 +204,7 @@ int main(void) {
 						if (okay) {
 							if (respLen>1) {
 								// ACK nur wenn die Gegenstelle mehr zu sagen hatte als "ACK"
-								uart1_tx(0x00,0); // ACK
+								uartBus_tx(0x00,0); // ACK
 							}
 						} else {
 							databufReset(&resp);
@@ -200,7 +214,7 @@ int main(void) {
 								storeData(&resp,'N');
 							} else {
 								storeData(&resp,'E');
-								uart1_tx(0xFF,0);
+								uartBus_tx(0xFF,0);
 							}
 						}
 					}
@@ -208,7 +222,7 @@ int main(void) {
 					respChk += (d&0xFF);
 
 				} else {
-					// uart1_rx not ready
+					// uartBus_rx not ready
 					_delay_us(100);
 					timeout++;
 					if (timeout >= 50) {
@@ -220,14 +234,14 @@ int main(void) {
 				}
 				break;
 			case SEND_RESP: // send response to PC
-				if (uart0_rx_ready() || uart1_rx_ready()) {
+				if (uartPC_rx_ready() || uartBus_rx_ready()) {
 					FATAL("rx while sending");
 				}
-				if (uart0_tx_ready()) {
+				if (uartPC_tx_ready()) {
 					if (hasData(&resp)) {
-						uart0_tx(readData(&resp));
+						uartPC_tx(readData(&resp));
 					} else {
-						uart0_tx('\n');
+						uartPC_tx('\n');
 						databufReset(&resp);
 						state=READ_CMD;
 					}

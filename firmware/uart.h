@@ -37,78 +37,81 @@
 #include "./io.h"
 #include <avr/pgmspace.h>
 
-void uart0_init(void);
-void uart0_tx_blocking(unsigned char byte);
-uint8_t uart0_tx_ready(void);
-void uart0_tx(uint8_t byte);
-uint8_t uart0_rx(void);
-void uart0_tx_str(unsigned char* string);
-uint8_t uart0_rx_ready(void);
-void uart1_init(void);
-uint8_t uart1_tx_ready(void);
-void uart1_tx(uint8_t byte, uint8_t bit8);
-uint16_t uart1_rx(void);
-void uart1_tx_str(unsigned char* string);
-uint8_t uart1_rx_ready(void);
+void uartPC_init(void);
+void uartPC_tx_blocking(unsigned char byte);
+uint8_t uartPC_tx_ready(void);
+void uartPC_tx(uint8_t byte);
+uint8_t uartPC_rx(void);
+void uartPC_tx_str(unsigned char* string);
+uint8_t uartPC_rx_ready(void);
+void uartBus_init(void);
+uint8_t uartBus_tx_ready(void);
+void uartBus_tx(uint8_t byte, uint8_t bit8);
+uint16_t uartBus_rx(void);
+void uartBus_tx_str(unsigned char* string);
+uint8_t uartBus_rx_ready(void);
 
 
 // UBRR=(F_CPU)/(baud*16L), aber gerundet:
 // UBRR=(obere Formel*2 +1)/2
 
-void uart0_init() {
-	uint16_t _ubrr=25;//(((F_CPU*2)/(baud*16L)) +1)/2;
+void uartPC_init() {
+	uint16_t _ubrr=38; // 38400 @ 12MHz mit U2X=1
 	uint8_t rx=1;
 	uint8_t tx=1;
 	// baud
-	UBRR0H = _ubrr>>8;
-	UBRR0L = _ubrr;
+	UBRR1H = _ubrr>>8;
+	UBRR1L = _ubrr;
+	
 	
 	// RX/TX aktivieren
-	UCSR0B = (rx << RXEN0)|(tx << TXEN0);
+	UCSR1A = (1<<U2X0);
+	
+	UCSR1B = (rx << RXEN1)|(tx << TXEN1);
 	
 	// 8 Bit Daten; 1 Stopbit; Synchronous Operation
-	UCSR0C = (0 << USBS1) | (1 << UCSZ01) | (3 << UCSZ00);
+	UCSR1C = (0 << USBS1) | (1 << UCSZ11) | (3 << UCSZ10);
 }
 
-void uart0_tx_blocking(unsigned char byte) {
-	while (!(UCSR0A & (1 << UDRE0))) {} // noch etwas blockiered
-	UDR0=byte;
+void uartPC_tx_blocking(unsigned char byte) {
+	while (!(UCSR1A & (1 << UDRE1))) {} // noch etwas blockiered
+	UDR1=byte;
 }
 
-uint8_t uart0_tx_ready(void) {
-	return (UCSR0A & (1 << UDRE0));
+uint8_t uartPC_tx_ready(void) {
+	return (UCSR1A & (1 << UDRE1));
 }
-void uart0_tx(uint8_t byte) {
-	if (!uart0_tx_ready()) {
-		FATAL("!uart0_tx_ready");
+void uartPC_tx(uint8_t byte) {
+	if (!uartPC_tx_ready()) {
+		FATAL("!uartPC_tx_ready");
 	}
-	UDR0=byte;
+	UDR1=byte;
 }
 
-uint8_t uart0_rx(void) {
+uint8_t uartPC_rx(void) {
 //	while (!(UCSRA & (1 << RXC))) {} es wird nicht gewartet! kein delay erlaubt!
-	return UDR0;
+	return UDR1;
 }
 
-void uart0_tx_str(unsigned char* string) {
+void uartPC_tx_str(unsigned char* string) {
 	uint16_t i=0;
 	while (string[i] != 0x00) {
-		uart0_tx_blocking(string[i]);	
+		uartPC_tx_blocking(string[i]);	
 		i++;
 	}
 }
 
-void uart0_tx_pstr(const char* PROGMEM str) {
+void uartPC_tx_pstr(const char* PROGMEM str) {
 	uint8_t byte;
 	while ((byte=pgm_read_byte(str++))) {
-		uart0_tx_blocking(byte);
+		uartPC_tx_blocking(byte);
 	}
 }
 
 
-uint8_t uart0_rx_ready(void) {
-	if (UCSR0A & (1<<RXC0)) {
-		if (UCSR0A & (1<<PE0)) {
+uint8_t uartPC_rx_ready(void) {
+	if (UCSR1A & (1<<RXC1)) {
+		if (UCSR1A & (1<<PE1)) {
 // 			Parity Error stillschweigend verwerfen
 // 			volatile uint8_t tmp=UDR;
 // 			tmp++;
@@ -122,51 +125,51 @@ uint8_t uart0_rx_ready(void) {
 }
 
 
-void uart1_init(void) {
-	uint16_t _ubrr=103;
+void uartBus_init(void) {
+	uint16_t _ubrr=77; // 9600 @ 12MHz
 	// baud
-	UBRR1H = _ubrr>>8;
-	UBRR1L = _ubrr;
+	UBRR0H = _ubrr>>8;
+	UBRR0L = _ubrr;
 	
 	// RX/TX aktivieren
-	UCSR1B = (1 << RXEN1)|(1 << TXEN1) | (1 << UCSZ12);
+	UCSR0B = (1 << RXEN0)|(1 << TXEN0) | (1 << UCSZ02);
 	
 	// 9 Bit Daten; 2 Stopbits; Synchronous Operation
-	UCSR1C = (1<<USBS1) |  (1 << UCSZ11) | (3 << UCSZ10);
+	UCSR0C = (1<<USBS0) |  (1 << UCSZ01) | (3 << UCSZ00);
 }
 
-uint8_t uart1_tx_ready(void) {
-	return (UCSR1A & (1 << UDRE1));
+uint8_t uartBus_tx_ready(void) {
+	return (UCSR0A & (1 << UDRE0));
 }
-void uart1_tx(uint8_t byte, uint8_t bit8) {
-	if (!uart1_tx_ready()) {
-		FATAL("!uart1_tx_ready");
+void uartBus_tx(uint8_t byte, uint8_t bit8) {
+	if (!uartBus_tx_ready()) {
+		FATAL("!uartBus_tx_ready");
 	}
-	UCSR1B &= ~(1<<TXB81);
+	UCSR0B &= ~(1<<TXB80);
 	if (bit8) {
-		UCSR1B |= (1<<TXB81);
+		UCSR0B |= (1<<TXB80);
 	}
-	UDR1=byte;
+	UDR0=byte;
 }
 
-uint16_t uart1_rx(void) {
+uint16_t uartBus_rx(void) {
 //	while (!(UCSRA & (1 << RXC))) {} es wird nicht gewartet! kein delay erlaubt!
 	//volatile uint8_t status=UCSR1A;
-	volatile uint8_t bit8=!!(UCSR1B&(1<<RXB81));
-	return UDR1 | (bit8<<8);
+	volatile uint8_t bit8=!!(UCSR0B&(1<<RXB80));
+	return UDR0 | (bit8<<8);
 }
 
-// void uart1_tx_str(unsigned char* string) {
+// void uartBus_tx_str(unsigned char* string) {
 // 	uint16_t i=0;
 // 	while (string[i] != 0x00) {
-// 		uart1_tx_blocking(string[i]);	
+// 		uartBus_tx_blocking(string[i]);	
 // 		i++;
 // 	}
 // }
 
-uint8_t uart1_rx_ready(void) {
-	if (UCSR1A & (1<<RXC1)) {
-		if (UCSR1A & (1<<PE1)) {
+uint8_t uartBus_rx_ready(void) {
+	if (UCSR0A & (1<<RXC0)) {
+		if (UCSR0A & (1<<PE0)) {
 // 			Parity Error stillschweigend verwerfen
 // 			volatile uint8_t tmp=UDR;
 // 			tmp++;

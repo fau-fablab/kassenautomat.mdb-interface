@@ -43,8 +43,8 @@ MCU_avrdude = m644p
 
 # Main Oscillator Frequency
 # This is only used to define F_OSC in all assembler and c-sources.
-F_OSC = 16000000
-F_CPU = 16000000
+F_OSC = 12000000
+F_CPU = 12000000
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
 
@@ -329,6 +329,9 @@ ramusage: $(TARGET).o
 program: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
+
+fuse: # external clock, 4.3V Brownout, no bootloader
+	$(AVRDUDE) $(AVRDUDE_FLAGS) -u -U lfuse:w:0xe0:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 
 
 
