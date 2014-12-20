@@ -84,34 +84,15 @@ uint8_t hexNibbleToAscii(uint8_t x) {
 //TODO sauber initialisieren
 
 int main(void) {
-  	//wdt_enable(WDTO_120MS);
-        // wdt_enable(WDTO_2S); //zum testen TODO
+	const uint8_t TEST=0;
+	if (!TEST) {
+		wdt_enable(WDTO_120MS);
+	}
 	LED_DDR |= (1<<LED_PIN); 		// setting LED-PIN to output
 	LED_PORT |= (1<<LED_PIN);
-// 	while (1) {
-// 		LED_DDR |= (1<<PB1);
-// 		LED_PORT |= (1<<PB1);
-// 		delayms(100);
-// 		LED_PORT &= ~(1<<LED_PIN);
-// 		LED_PORT &= ~(1<<PB1);
-// 		delayms(100);
-// 	}
         
-//	OSCCAL = 0b01101001;			// kalibriere auf 9,6MHz
-	uartPC_init();//(38400,1,1);
+	uartPC_init();
 	uartBus_init();
-	
-	while(1) {
-		uartPC_tx_str("Deine Mutter");
-		delayms(100);
-		/*
-		if (uartPC_rx_ready()) {
-			LED_PORT &= ~(1<<LED_PIN);
-			delayms(100);
-			LED_PORT |= (1<<LED_PIN);
-			uartPC_tx(uartPC_rx());
-		}*/
-	}
         
 	// UART DDRs:
 	DDRD |= (1<<PD3) | (1<<PD1);
@@ -122,10 +103,30 @@ int main(void) {
 	// erstmal ein byte senden, damit txReady funktioniert
 	uartPC_tx('\n');
 	uartBus_tx(0xFF,1);
-	uartPC_tx_pstr(PSTR("INFO:booting\n"));     
+	
+	if (TEST) {
+		LED_PORT ^= (1<<LED_PIN);
+		delayms(1000);
+		LED_PORT ^= (1<<LED_PIN);
+		delayms(1000);
+		
+		uartPC_tx_pstr(PSTR("TEST active\n"));     
+		while(1) {
+			LED_PORT ^= (1<<LED_PIN);
+			if (uartPC_rx_ready()) {
+				uint8_t d=uartPC_rx();
+				uartPC_tx_pstr(PSTR("RX:"));
+				uartPC_tx_blocking(d); 
+				uartPC_tx_blocking('\n'); 
+			} else {
+				uartPC_tx_pstr(PSTR("."));
+			}
+		}
+	}
+	
+	uartPC_tx_pstr(PSTR("INFO:booting\n"));   
 	
         while(1) {
-                // Testcode: LED-Blinker mit 10Hz
 		wdt_reset();
                 delayms(10);
                 LED_PORT &= ~(1<<LED_PIN);
@@ -136,7 +137,7 @@ int main(void) {
 				if (uartPC_rx_ready()) {
                                   LED_PORT |= (1<<LED_PIN);
 					uint8_t d=uartPC_rx();
-					uartPC_tx_blocking(d); // TODO nur test, wieder auskommentieren
+					// uartPC_tx_blocking(d); // als "loopback" test - PC-Software ist nicht dafür gedacht, also nur für händisches Testen einkommentieren
 					if (d=='\r' || d=='\n') {
 						state=SEND_CMD;
 						cmdBytesSent=0;
