@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-16 BZR 5324)-product   date = So 18 Jan 2015 14:26:47 CET
+Cmp-Mod V01 Created by Cvpcb (2014-12-16 BZR 5324)-product   date = So 18 Jan 2015 15:35:14 CET
 
 BeginCmp
 TimeStamp = /531B4437;
@@ -333,18 +333,18 @@ BeginCmp
 TimeStamp = /54BBCBCD;
 Reference = P13;
 ValeurCmp = CONN_01X01;
-IdModule  = Connect:1pin;
+IdModule  = Measurement_Points:Measurement_Point_Square-TH_Small;
 EndCmp
 
 BeginCmp
-TimeStamp = /54BBB005;
+TimeStamp = /54BBDCA1;
 Reference = Q1;
 ValeurCmp = BCW67;
 IdModule  = Transistors_SMD:sot23;
 EndCmp
 
 BeginCmp
-TimeStamp = /54BBB1C4;
+TimeStamp = /54BBE1C5;
 Reference = Q2;
 ValeurCmp = BCW67;
 IdModule  = Transistors_SMD:sot23;

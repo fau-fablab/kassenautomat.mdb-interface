@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/patrick/Dokumente/FabLab/Kassenterminal/muenzerusb/kassenautomat.mdb-interface/hardware/mdb-interface.sch)
-    (date "So 18 Jan 2015 14:26:36 CET")
+    (date "So 18 Jan 2015 15:35:02 CET")
     (tool "Eeschema (2014-12-16 BZR 5324)-product"))
   (components
     (comp (ref R8)
@@ -462,68 +462,21 @@
       (tstamp 54BC0759))
     (comp (ref P13)
       (value CONN_01X01)
-      (footprint Connect:1pin)
+      (footprint Measurement_Points:Measurement_Point_Square-TH_Small)
       (libsource (lib conn) (part CONN_01X01))
       (sheetpath (names /) (tstamps /))
       (tstamp 54BBCBCD))
     (comp (ref Q1)
       (value BCW67)
-      (libsource (lib device) (part PNP))
+      (libsource (lib pnp) (part PNP_1B2E3C))
       (sheetpath (names /) (tstamps /))
-      (tstamp 54BBB005))
+      (tstamp 54BBDCA1))
     (comp (ref Q2)
       (value BCW67)
-      (libsource (lib device) (part PNP))
+      (libsource (lib pnp) (part PNP_1B2E3C))
       (sheetpath (names /) (tstamps /))
-      (tstamp 54BBB1C4)))
+      (tstamp 54BBE1C5)))
   (libparts
-    (libpart (lib device) (part C)
-      (description "Condensateur non polarise")
-      (footprints
-        (fp SM*)
-        (fp C?)
-        (fp C1-1))
-      (fields
-        (field (name Reference) C)
-        (field (name Value) C))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
-    (libpart (lib device) (part CP)
-      (aliases
-        (alias CAPAPOL))
-      (description "Condensateur polarise")
-      (footprints
-        (fp CP*)
-        (fp SM*))
-      (fields
-        (field (name Reference) C)
-        (field (name Value) CP))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
-    (libpart (lib device) (part CRYSTAL)
-      (fields
-        (field (name Reference) X)
-        (field (name Value) CRYSTAL))
-      (pins
-        (pin (num 1) (name 1) (type passive))
-        (pin (num 2) (name 2) (type passive))))
-    (libpart (lib device) (part FUSE)
-      (fields
-        (field (name Reference) F)
-        (field (name Value) FUSE))
-      (pins
-        (pin (num 1) (name ~) (type input))
-        (pin (num 2) (name ~) (type input))))
-    (libpart (lib device) (part JUMPER3)
-      (fields
-        (field (name Reference) JP)
-        (field (name Value) JUMPER3))
-      (pins
-        (pin (num 1) (name 1) (type passive))
-        (pin (num 2) (name 2) (type passive))
-        (pin (num 3) (name 3) (type passive))))
     (libpart (lib device) (part LED)
       (footprints
         (fp LED-3MM)
@@ -539,26 +492,60 @@
       (pins
         (pin (num 1) (name A) (type passive))
         (pin (num 2) (name K) (type passive))))
-    (libpart (lib device) (part MOS_N)
-      (aliases
-        (alias MOSFET_N))
-      (docs transistors/mos/*.*)
+    (libpart (lib mdb-interface-cache) (part CONN_1)
       (fields
-        (field (name Reference) Q)
-        (field (name Value) MOS_N))
+        (field (name Reference) P)
+        (field (name Value) CONN_1))
       (pins
-        (pin (num D) (name D) (type passive))
-        (pin (num G) (name G) (type input))
-        (pin (num S) (name S) (type passive))))
-    (libpart (lib device) (part PNP)
-      (docs transistors/bipolar/*.*)
+        (pin (num 1) (name 1) (type passive))))
+    (libpart (lib mdb-interface-cache) (part CONN_2)
       (fields
-        (field (name Reference) Q)
-        (field (name Value) PNP))
+        (field (name Reference) P)
+        (field (name Value) CONN_2))
       (pins
-        (pin (num 1) (name E) (type passive))
-        (pin (num 2) (name B) (type input))
-        (pin (num 3) (name C) (type passive))))
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name PM) (type passive))))
+    (libpart (lib mdb-interface-cache) (part CONN_3)
+      (fields
+        (field (name Reference) K)
+        (field (name Value) CONN_3))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name PM) (type passive))
+        (pin (num 3) (name P3) (type passive))))
+    (libpart (lib mdb-interface-cache) (part CONN_4)
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_4))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name P2) (type passive))
+        (pin (num 3) (name P3) (type passive))
+        (pin (num 4) (name P4) (type passive))))
+    (libpart (lib mdb-interface-cache) (part CONN_6)
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_6))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))
+        (pin (num 3) (name 3) (type passive))
+        (pin (num 4) (name 4) (type passive))
+        (pin (num 5) (name 5) (type passive))
+        (pin (num 6) (name 6) (type passive))))
+    (libpart (lib mdb-interface-cache) (part CONN_8)
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_8))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name P2) (type passive))
+        (pin (num 3) (name P3) (type passive))
+        (pin (num 4) (name P4) (type passive))
+        (pin (num 5) (name P5) (type passive))
+        (pin (num 6) (name P6) (type passive))
+        (pin (num 7) (name P7) (type passive))
+        (pin (num 8) (name P8) (type passive))))
     (libpart (lib device) (part R)
       (description Resistance)
       (footprints
@@ -573,48 +560,6 @@
       (pins
         (pin (num 1) (name ~) (type passive))
         (pin (num 2) (name ~) (type passive))))
-    (libpart (lib device) (part SW_PUSH)
-      (description "Push Button")
-      (fields
-        (field (name Reference) SW)
-        (field (name Value) SW_PUSH))
-      (pins
-        (pin (num 1) (name 1) (type passive))
-        (pin (num 2) (name 2) (type passive))))
-    (libpart (lib device) (part ZENER)
-      (description "Diode zener")
-      (footprints
-        (fp D?)
-        (fp SO*)
-        (fp SM*))
-      (fields
-        (field (name Reference) D)
-        (field (name Value) ZENER))
-      (pins
-        (pin (num 1) (name A) (type passive))
-        (pin (num 2) (name K) (type passive))))
-    (libpart (lib device) (part ZENERsmall)
-      (footprints
-        (fp D?)
-        (fp SO*)
-        (fp SM*))
-      (fields
-        (field (name Reference) D)
-        (field (name Value) ZENERsmall))
-      (pins
-        (pin (num 1) (name A) (type passive))
-        (pin (num 2) (name K) (type passive))))
-    (libpart (lib conn) (part CONN_01X01)
-      (footprints
-        (fp Pin_Header_Straight_1X01)
-        (fp Pin_Header_Angled_1X01)
-        (fp Socket_Strip_Straight_1X01)
-        (fp Socket_Strip_Angled_1X01))
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_01X01))
-      (pins
-        (pin (num 1) (name P1) (type passive))))
     (libpart (lib conn) (part USB)
       (fields
         (field (name Reference) J)
@@ -626,6 +571,17 @@
         (pin (num 4) (name GND) (type power_in))
         (pin (num 5) (name Shield_1) (type passive))
         (pin (num 6) (name Shield_2) (type passive))))
+    (libpart (lib conn) (part CONN_01X01)
+      (footprints
+        (fp Pin_Header_Straight_1X01)
+        (fp Pin_Header_Angled_1X01)
+        (fp Socket_Strip_Straight_1X01)
+        (fp Socket_Strip_Angled_1X01))
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_01X01))
+      (pins
+        (pin (num 1) (name P1) (type passive))))
     (libpart (lib interface) (part FT232RL)
       (description "USB to serial interface")
       (fields
@@ -718,71 +674,117 @@
         (pin (num 42) (name "(PCINT10/AIN0/INT2)PB2") (type BiDi))
         (pin (num 43) (name "(PCINT11/AIN1/OC0)PB3") (type BiDi))
         (pin (num 44) (name "(PCINT12/OC0B/~SS~)PB4") (type BiDi))))
-    (libpart (lib mdb-interface-cache) (part CONN_1)
+    (libpart (lib device) (part JUMPER3)
       (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_1))
-      (pins
-        (pin (num 1) (name 1) (type passive))))
-    (libpart (lib mdb-interface-cache) (part CONN_2)
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_2))
-      (pins
-        (pin (num 1) (name P1) (type passive))
-        (pin (num 2) (name PM) (type passive))))
-    (libpart (lib mdb-interface-cache) (part CONN_3)
-      (fields
-        (field (name Reference) K)
-        (field (name Value) CONN_3))
-      (pins
-        (pin (num 1) (name P1) (type passive))
-        (pin (num 2) (name PM) (type passive))
-        (pin (num 3) (name P3) (type passive))))
-    (libpart (lib mdb-interface-cache) (part CONN_4)
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_4))
-      (pins
-        (pin (num 1) (name P1) (type passive))
-        (pin (num 2) (name P2) (type passive))
-        (pin (num 3) (name P3) (type passive))
-        (pin (num 4) (name P4) (type passive))))
-    (libpart (lib mdb-interface-cache) (part CONN_6)
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_6))
+        (field (name Reference) JP)
+        (field (name Value) JUMPER3))
       (pins
         (pin (num 1) (name 1) (type passive))
         (pin (num 2) (name 2) (type passive))
-        (pin (num 3) (name 3) (type passive))
-        (pin (num 4) (name 4) (type passive))
-        (pin (num 5) (name 5) (type passive))
-        (pin (num 6) (name 6) (type passive))))
-    (libpart (lib mdb-interface-cache) (part CONN_8)
+        (pin (num 3) (name 3) (type passive))))
+    (libpart (lib pnp) (part PNP_1B2E3C)
+      (description PNP_1B2E3C)
       (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_8))
+        (field (name Reference) Q)
+        (field (name Value) PNP_1B2E3C))
       (pins
-        (pin (num 1) (name P1) (type passive))
-        (pin (num 2) (name P2) (type passive))
-        (pin (num 3) (name P3) (type passive))
-        (pin (num 4) (name P4) (type passive))
-        (pin (num 5) (name P5) (type passive))
-        (pin (num 6) (name P6) (type passive))
-        (pin (num 7) (name P7) (type passive))
-        (pin (num 8) (name P8) (type passive)))))
+        (pin (num 1) (name B) (type input))
+        (pin (num 2) (name E) (type passive))
+        (pin (num 3) (name C) (type passive))))
+    (libpart (lib device) (part FUSE)
+      (fields
+        (field (name Reference) F)
+        (field (name Value) FUSE))
+      (pins
+        (pin (num 1) (name ~) (type input))
+        (pin (num 2) (name ~) (type input))))
+    (libpart (lib device) (part SW_PUSH)
+      (description "Push Button")
+      (fields
+        (field (name Reference) SW)
+        (field (name Value) SW_PUSH))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))))
+    (libpart (lib device) (part ZENERsmall)
+      (footprints
+        (fp D?)
+        (fp SO*)
+        (fp SM*))
+      (fields
+        (field (name Reference) D)
+        (field (name Value) ZENERsmall))
+      (pins
+        (pin (num 1) (name A) (type passive))
+        (pin (num 2) (name K) (type passive))))
+    (libpart (lib device) (part ZENER)
+      (description "Diode zener")
+      (footprints
+        (fp D?)
+        (fp SO*)
+        (fp SM*))
+      (fields
+        (field (name Reference) D)
+        (field (name Value) ZENER))
+      (pins
+        (pin (num 1) (name A) (type passive))
+        (pin (num 2) (name K) (type passive))))
+    (libpart (lib device) (part C)
+      (description "Condensateur non polarise")
+      (footprints
+        (fp SM*)
+        (fp C?)
+        (fp C1-1))
+      (fields
+        (field (name Reference) C)
+        (field (name Value) C))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib device) (part CP)
+      (aliases
+        (alias CAPAPOL))
+      (description "Condensateur polarise")
+      (footprints
+        (fp CP*)
+        (fp SM*))
+      (fields
+        (field (name Reference) C)
+        (field (name Value) CP))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib device) (part CRYSTAL)
+      (fields
+        (field (name Reference) X)
+        (field (name Value) CRYSTAL))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))))
+    (libpart (lib device) (part MOS_N)
+      (aliases
+        (alias MOSFET_N))
+      (docs transistors/mos/*.*)
+      (fields
+        (field (name Reference) Q)
+        (field (name Value) MOS_N))
+      (pins
+        (pin (num D) (name D) (type passive))
+        (pin (num G) (name G) (type input))
+        (pin (num S) (name S) (type passive)))))
   (libraries
-    (library (logical device)
-      (uri /usr/local/share/kicad/library/device.lib))
-    (library (logical conn)
-      (uri /usr/local/share/kicad/library/conn.lib))
+    (library (logical mdb-interface-cache)
+      (uri /home/patrick/Dokumente/FabLab/Kassenterminal/muenzerusb/kassenautomat.mdb-interface/hardware/mdb-interface-cache.lib))
     (library (logical interface)
       (uri /usr/local/share/kicad/library/interface.lib))
     (library (logical atmel)
       (uri /usr/local/share/kicad/library/atmel.lib))
-    (library (logical mdb-interface-cache)
-      (uri /home/patrick/Dokumente/FabLab/Kassenterminal/muenzerusb/kassenautomat.mdb-interface/hardware/mdb-interface-cache.lib)))
+    (library (logical pnp)
+      (uri /home/patrick/Dokumente/FabLab/Kassenterminal/muenzerusb/kassenautomat.mdb-interface/hardware/PNP/pnp.lib))
+    (library (logical conn)
+      (uri /usr/local/share/kicad/library/conn.lib))
+    (library (logical device)
+      (uri /usr/local/share/kicad/library/device.lib)))
   (nets
     (net (code 1) (name +12V)
       (node (ref P8) (pin 4))
@@ -845,7 +847,7 @@
       (node (ref U1) (pin 4))
       (node (ref C5) (pin 1))
       (node (ref R4) (pin 1))
-      (node (ref Q1) (pin 1))
+      (node (ref Q1) (pin 2))
       (node (ref JP1) (pin 2))
       (node (ref P7) (pin 2))
       (node (ref D7) (pin 1))
@@ -913,12 +915,12 @@
       (node (ref P12) (pin 1)))
     (net (code 35) (name "Net-(Q1-Pad3)")
       (node (ref R1) (pin 2))
-      (node (ref Q2) (pin 2))
-      (node (ref Q1) (pin 3)))
-    (net (code 36) (name "Net-(Q1-Pad2)")
       (node (ref Q2) (pin 1))
+      (node (ref Q1) (pin 3)))
+    (net (code 36) (name "Net-(Q1-Pad1)")
+      (node (ref Q2) (pin 2))
       (node (ref R5) (pin 2))
-      (node (ref Q1) (pin 2)))
+      (node (ref Q1) (pin 1)))
     (net (code 37) (name /VUSB)
       (node (ref C1) (pin 1))
       (node (ref J1) (pin 1))
