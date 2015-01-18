@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-16 BZR 5324)-product   date = So 18 Jan 2015 13:22:54 CET
+Cmp-Mod V01 Created by Cvpcb (2014-12-16 BZR 5324)-product   date = So 18 Jan 2015 13:28:05 CET
 
 BeginCmp
 TimeStamp = /531B4437;
@@ -327,6 +327,13 @@ TimeStamp = /5366AD4D;
 Reference = P12;
 ValeurCmp = CONN_1;
 IdModule  = Mounting_Holes:MountingHole_3-7mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /54BBCBCD;
+Reference = P13;
+ValeurCmp = CONN_01X01;
+IdModule  = Connect:1pin;
 EndCmp
 
 BeginCmp
