@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/patrick/Dokumente/FabLab/Kassenterminal/muenzerusb/kassenautomat.mdb-interface/hardware/mdb-interface.sch)
-    (date "So 18 Jan 2015 13:41:05 CET")
+    (date "So 18 Jan 2015 14:26:36 CET")
     (tool "Eeschema (2014-12-16 BZR 5324)-product"))
   (components
     (comp (ref R8)

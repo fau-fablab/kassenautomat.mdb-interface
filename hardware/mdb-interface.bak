@@ -36,11 +36,11 @@ EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
-Title ""
-Date "10 apr 2014"
-Rev ""
-Comp ""
-Comment1 ""
+Title "MDB-Interface"
+Date "So 18 Jan 2015"
+Rev "r2"
+Comp "FAU FabLab, Patrick Kanzler 2015"
+Comment1 "CC-BY-SA 3.0"
 Comment2 ""
 Comment3 ""
 Comment4 ""
