@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-08-05 BZR 5055)-product   date = Mi 06 Aug 2014 17:46:29 CEST
+Cmp-Mod V01 Created by Cvpcb (2014-12-16 BZR 5324)-product   date = So 18 Jan 2015 13:22:54 CET
 
 BeginCmp
 TimeStamp = /531B4437;
@@ -38,7 +38,7 @@ EndCmp
 BeginCmp
 TimeStamp = /53E257B2;
 Reference = C6;
-ValeurCmp = C;
+ValeurCmp = 100n;
 IdModule  = SMD_Packages:SM0805;
 EndCmp
 
@@ -52,7 +52,7 @@ EndCmp
 BeginCmp
 TimeStamp = /53E2582F;
 Reference = C8;
-ValeurCmp = C;
+ValeurCmp = 100n;
 IdModule  = SMD_Packages:SM0805;
 EndCmp
 
@@ -222,6 +222,13 @@ TimeStamp = /531B4395;
 Reference = J1;
 ValeurCmp = USB;
 IdModule  = Connect:USB_B;
+EndCmp
+
+BeginCmp
+TimeStamp = /54BC0759;
+Reference = JP1;
+ValeurCmp = JUMPER3;
+IdModule  = Oddities:NetTie-II_SMD;
 EndCmp
 
 BeginCmp
