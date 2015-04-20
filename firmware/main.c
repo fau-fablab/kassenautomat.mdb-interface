@@ -32,8 +32,12 @@ void fatal_real(const char * PROGMEM str, uint8_t d);
 
 #define LED_DDR DDRB				// Hier DDR der Test-LED einstellen!
 #define LED_PORT PORTB				// Hier PORT der Test-LED einstellen!
-#define LED_PIN PB0				// Hier PIN der Test-LED einstellen!
-#define LED(x) out(LED_PORT,LED_PIN,0,x)	// DO NOT CHANGE
+#define LED_AMBER_PIN PB0				// Hier PIN der Test-LED einstellen!
+#define LED_BLUE_PIN PB1
+#define LED_AMBER(x) out(LED_PORT,LED_AMBER_PIN,0,x)	// DO NOT CHANGE
+#define LED_BLUE(x) out(LED_PORT,LED_BLUE_PIN,0,x)	// DO NOT CHANGE
+
+// RGB LED siehe weiter unten im Programm
 
 
 uint8_t hexNibbleToAscii(uint8_t x);
@@ -88,14 +92,22 @@ int main(void) {
 	if (!TEST) {
 		wdt_enable(WDTO_120MS);
 	}
-	LED_DDR |= (1<<LED_PIN); 		// setting LED-PIN to output
-	LED_PORT |= (1<<LED_PIN);
+	LED_DDR |= (1<<LED_AMBER_PIN) | (1<<LED_BLUE_PIN); 		// setting LED-PIN to output
+	LED_PORT |= (1<<LED_AMBER_PIN);
         
 	uartPC_init();
 	uartBus_init();
         
 	// UART DDRs:
 	DDRD |= (1<<PD3) | (1<<PD1);
+        
+        
+        // RGB LED
+        // TODO erstmal dauerhaft an
+        DDRD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
+        PORTD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
+        DDRB |= (1<<PB3) | (1<<PB4);
+        PORTB |= (1<<PB3) | (1<<PB4);
         
 	databufReset(&cmd);
 	databufReset(&resp);
@@ -105,21 +117,21 @@ int main(void) {
 	uartBus_tx(0xFF,1);
 	
 	if (TEST) {
-		LED_PORT ^= (1<<LED_PIN);
+		LED_PORT ^= (1<<LED_AMBER_PIN);
 		delayms(1000);
-		LED_PORT ^= (1<<LED_PIN);
+		LED_PORT ^= (1<<LED_AMBER_PIN);
 		delayms(1000);
 		
 		uartPC_tx_pstr(PSTR("TEST active\n"));     
 		while(1) {
-			LED_PORT ^= (1<<LED_PIN);
+			LED_PORT ^= (1<<LED_AMBER_PIN);
 			if (uartPC_rx_ready()) {
 				uint8_t d=uartPC_rx();
 				uartPC_tx_pstr(PSTR("RX:"));
 				uartPC_tx_blocking(d); 
 				uartPC_tx_blocking('\n'); 
 			} else {
-				uartPC_tx_pstr(PSTR("."));
+				//uartPC_tx_pstr(PSTR("."));
 			}
 		}
 	}
@@ -128,14 +140,14 @@ int main(void) {
 	
         while(1) {
 		wdt_reset();
-                delayms(10);
-                LED_PORT &= ~(1<<LED_PIN);
-                LED_PORT &= ~(1<<PB1);
-                delayms(10);
+                // ATTENTION, no delays > 100µs allowed here because otherwise data can be lost on the UART
+                
+                LED_BLUE(state != READ_CMD);
+                LED_AMBER(state == READ_CMD);
+                        
                 switch (state) {
 			case READ_CMD: // get command from PC
 				if (uartPC_rx_ready()) {
-                                  LED_PORT |= (1<<LED_PIN);
 					uint8_t d=uartPC_rx();
 					// uartPC_tx_blocking(d); // als "loopback" test - PC-Software ist nicht dafür gedacht, also nur für händisches Testen einkommentieren
 					if (d=='\r' || d=='\n') {
@@ -147,7 +159,6 @@ int main(void) {
 				}
 				break;
 			case SEND_CMD: // send command to device
-                                LED_PORT |= (1<<PB1);
 				if (uartPC_rx_ready() || uartBus_rx_ready()) {
 					FATAL("rx while SEND CMD");
 				}
