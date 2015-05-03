@@ -1,0 +1,640 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:profet
+LIBS:hopper-connector-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "hopper-interface"
+Date "Sa 02 Mai 2015"
+Rev "r0"
+Comp "Patrick Kanzler, FAU FabLab"
+Comment1 ""
+Comment2 "to the mdb-interface-PCB"
+Comment3 "a Money Controls Compact Hopper"
+Comment4 "Hardware-Interface for connecting"
+$EndDescr
+$Comp
+L CONN_01X04 P4
+U 1 1 5544CC01
+P 3600 1250
+F 0 "P4" H 3600 1500 50  0000 C CNN
+F 1 "CONN_01X04" V 3700 1250 50  0000 C CNN
+F 2 "" H 3600 1250 60  0000 C CNN
+F 3 "" H 3600 1250 60  0000 C CNN
+	1    3600 1250
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 P5
+U 1 1 5544CC8B
+P 3600 1950
+F 0 "P5" H 3600 2200 50  0000 C CNN
+F 1 "CONN_01X04" V 3700 1950 50  0000 C CNN
+F 2 "" H 3600 1950 60  0000 C CNN
+F 3 "" H 3600 1950 60  0000 C CNN
+	1    3600 1950
+	1    0    0    -1  
+$EndComp
+Text Notes 3000 850  0    60   ~ 0
+two connectors to the hopper\ndifferent pitch for different connectors
+Text Label 3050 1100 0    60   ~ 0
+V_mot
+Text Label 3050 1800 0    60   ~ 0
+V_mot
+Text Label 3050 1200 0    60   ~ 0
+V_0
+Text Label 3050 1900 0    60   ~ 0
+V_0
+Text Label 3050 1300 0    60   ~ 0
+V_opto
+Text Label 3050 2000 0    60   ~ 0
+V_opto
+Text Label 3050 1400 0    60   ~ 0
+coin_cnt
+Text Label 3050 2100 0    60   ~ 0
+coin_cnt
+$Comp
+L CONN_01X02 P1
+U 1 1 5544CE5E
+P 1850 1250
+F 0 "P1" H 1850 1400 50  0000 C CNN
+F 1 "CONN_01X02" V 1950 1250 50  0000 C CNN
+F 2 "" H 1850 1250 60  0000 C CNN
+F 3 "" H 1850 1250 60  0000 C CNN
+	1    1850 1250
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X02 P2
+U 1 1 5544CF50
+P 1850 2000
+F 0 "P2" H 1850 2150 50  0000 C CNN
+F 1 "CONN_01X02" V 1950 2000 50  0000 C CNN
+F 2 "" H 1850 2000 60  0000 C CNN
+F 3 "" H 1850 2000 60  0000 C CNN
+	1    1850 2000
+	1    0    0    -1  
+$EndComp
+Text Notes 700  750  0    60   ~ 0
+ingoing and outgoing supply-connector\n--> can be used as a\n      daisy-chain-connector
+$Comp
+L GND #PWR01
+U 1 1 5544CF9B
+P 1000 1400
+F 0 "#PWR01" H 1000 1150 50  0001 C CNN
+F 1 "GND" H 1000 1250 50  0000 C CNN
+F 2 "" H 1000 1400 60  0000 C CNN
+F 3 "" H 1000 1400 60  0000 C CNN
+	1    1000 1400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3400 1100 3050 1100
+Wire Wire Line
+	3400 1200 3050 1200
+Wire Wire Line
+	3400 1300 3050 1300
+Wire Wire Line
+	3050 1400 3400 1400
+Wire Wire Line
+	3400 1800 3050 1800
+Wire Wire Line
+	3050 1900 3400 1900
+Wire Wire Line
+	3050 2000 3400 2000
+Wire Wire Line
+	3050 2100 3400 2100
+Wire Wire Line
+	1000 2050 1650 2050
+Wire Wire Line
+	1000 2050 1000 2150
+$Comp
+L GND #PWR02
+U 1 1 5544D006
+P 1000 2150
+F 0 "#PWR02" H 1000 1900 50  0001 C CNN
+F 1 "GND" H 1000 2000 50  0000 C CNN
+F 2 "" H 1000 2150 60  0000 C CNN
+F 3 "" H 1000 2150 60  0000 C CNN
+	1    1000 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L +24V #PWR03
+U 1 1 5544D017
+P 1000 1100
+F 0 "#PWR03" H 1000 950 50  0001 C CNN
+F 1 "+24V" H 1000 1240 50  0000 C CNN
+F 2 "" H 1000 1100 60  0000 C CNN
+F 3 "" H 1000 1100 60  0000 C CNN
+	1    1000 1100
+	1    0    0    -1  
+$EndComp
+$Comp
+L +24V #PWR04
+U 1 1 5544D02D
+P 1000 1850
+F 0 "#PWR04" H 1000 1700 50  0001 C CNN
+F 1 "+24V" H 1000 1990 50  0000 C CNN
+F 2 "" H 1000 1850 60  0000 C CNN
+F 3 "" H 1000 1850 60  0000 C CNN
+	1    1000 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1000 1300 1650 1300
+Wire Wire Line
+	1000 1300 1000 1400
+Wire Wire Line
+	1000 1200 1650 1200
+Wire Wire Line
+	1000 1200 1000 1100
+Wire Wire Line
+	1000 1850 1000 1950
+Wire Wire Line
+	1000 1950 1650 1950
+$Comp
+L LTV-817 U1
+U 1 1 55461FAB
+P 5500 1700
+F 0 "U1" H 5300 1900 50  0000 L CNN
+F 1 "LTV-817" H 5500 1900 50  0000 L CNN
+F 2 "DIP-4" H 5300 1500 50  0000 L CIN
+F 3 "" H 5500 1600 50  0000 L CNN
+	1    5500 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L +24V #PWR05
+U 1 1 55462180
+P 6900 800
+F 0 "#PWR05" H 6900 650 50  0001 C CNN
+F 1 "+24V" H 6900 940 50  0000 C CNN
+F 2 "" H 6900 800 60  0000 C CNN
+F 3 "" H 6900 800 60  0000 C CNN
+	1    6900 800 
+	1    0    0    -1  
+$EndComp
+Text Label 7850 1700 2    60   ~ 0
+V_mot
+Wire Wire Line
+	7550 1700 7850 1700
+$Comp
+L D D1
+U 1 1 55462252
+P 8050 1750
+F 0 "D1" H 8050 1850 50  0000 C CNN
+F 1 "D" H 8050 1650 50  0000 C CNN
+F 2 "" H 8050 1750 60  0000 C CNN
+F 3 "" H 8050 1750 60  0000 C CNN
+	1    8050 1750
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8050 1500 8050 1600
+Wire Wire Line
+	8050 2000 8050 1900
+Text Label 7850 1850 2    60   ~ 0
+V_0
+Wire Wire Line
+	7550 1850 7850 1850
+$Comp
+L GND #PWR06
+U 1 1 554623B9
+P 6900 2400
+F 0 "#PWR06" H 6900 2150 50  0001 C CNN
+F 1 "GND" H 6900 2250 50  0000 C CNN
+F 2 "" H 6900 2400 60  0000 C CNN
+F 3 "" H 6900 2400 60  0000 C CNN
+	1    6900 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X05 P3
+U 1 1 5546249B
+P 2100 3550
+F 0 "P3" H 2100 3850 50  0000 C CNN
+F 1 "CONN_01X05" V 2200 3550 50  0000 C CNN
+F 2 "" H 2100 3550 60  0000 C CNN
+F 3 "" H 2100 3550 60  0000 C CNN
+	1    2100 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5VD #PWR07
+U 1 1 554624D4
+P 850 3200
+F 0 "#PWR07" H 850 3050 50  0001 C CNN
+F 1 "+5VD" H 850 3340 50  0000 C CNN
+F 2 "" H 850 3200 60  0000 C CNN
+F 3 "" H 850 3200 60  0000 C CNN
+	1    850  3200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	950  3200 950  3350
+Wire Wire Line
+	950  3350 1900 3350
+$Comp
+L GNDD #PWR08
+U 1 1 5546255E
+P 850 3600
+F 0 "#PWR08" H 850 3350 50  0001 C CNN
+F 1 "GNDD" H 850 3450 50  0000 C CNN
+F 2 "" H 850 3600 60  0000 C CNN
+F 3 "" H 850 3600 60  0000 C CNN
+	1    850  3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	950  3450 1900 3450
+Wire Wire Line
+	950  3450 950  3600
+Text Label 1450 3550 0    60   ~ 0
+mot_enbl
+Wire Wire Line
+	1450 3550 1900 3550
+Text Label 1450 3650 0    60   ~ 0
+opt_enbl
+Text Label 1450 3750 0    60   ~ 0
+opt_out
+Wire Wire Line
+	1450 3650 1900 3650
+Wire Wire Line
+	1450 3750 1900 3750
+Text Notes 750  2950 0    60   ~ 0
+connector to the mdb-interface-PCB
+$Comp
+L GNDD #PWR09
+U 1 1 554628D5
+P 5050 2000
+F 0 "#PWR09" H 5050 1750 50  0001 C CNN
+F 1 "GNDD" H 5050 1850 50  0000 C CNN
+F 2 "" H 5050 2000 60  0000 C CNN
+F 3 "" H 5050 2000 60  0000 C CNN
+	1    5050 2000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 1800 5050 1800
+Wire Wire Line
+	5050 1800 5050 2000
+Text Label 5450 950  2    60   ~ 0
+mot_enbl
+Wire Wire Line
+	5450 950  5050 950 
+Wire Wire Line
+	5050 950  5050 1200
+Wire Wire Line
+	5050 1400 5050 1600
+Wire Wire Line
+	5050 1600 5200 1600
+Text Notes 4000 4650 0    60   ~ 12
+TODO: Bauteile auswählen und Schaltplan dahingehend anpassen\nTODO: Basis der Opto-Coupler beschalten? Mit 270kR und 470pF auf GND legen?
+$Comp
+L LTV-817 U2
+U 1 1 5546497C
+P 4200 3550
+F 0 "U2" H 4000 3750 50  0000 L CNN
+F 1 "LTV-817" H 4200 3750 50  0000 L CNN
+F 2 "DIP-4" H 4000 3350 50  0000 L CIN
+F 3 "" H 4200 3450 50  0000 L CNN
+	1    4200 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L GNDD #PWR010
+U 1 1 55464988
+P 3750 3850
+F 0 "#PWR010" H 3750 3600 50  0001 C CNN
+F 1 "GNDD" H 3750 3700 50  0000 C CNN
+F 2 "" H 3750 3850 60  0000 C CNN
+F 3 "" H 3750 3850 60  0000 C CNN
+	1    3750 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3900 3650 3750 3650
+Wire Wire Line
+	3750 3650 3750 3850
+Text Label 4150 2800 2    60   ~ 0
+opt_enbl
+Wire Wire Line
+	4150 2800 3750 2800
+Wire Wire Line
+	3750 2800 3750 3050
+Wire Wire Line
+	3750 3250 3750 3450
+Wire Wire Line
+	3750 3450 3900 3450
+Text Label 5450 3450 2    60   ~ 0
+V_opto
+Wire Wire Line
+	8050 1500 7550 1500
+Wire Wire Line
+	7550 1300 7550 1700
+Wire Wire Line
+	7550 1850 7550 2000
+Wire Wire Line
+	5800 1800 5800 2000
+Wire Wire Line
+	5900 1150 5900 1600
+Wire Wire Line
+	5900 1600 5800 1600
+Wire Wire Line
+	4950 3450 5450 3450
+$Comp
+L C_Small C1
+U 1 1 554659E1
+P 700 3400
+F 0 "C1" H 710 3470 50  0000 L CNN
+F 1 "10u" H 710 3320 50  0000 L CNN
+F 2 "" H 700 3400 60  0000 C CNN
+F 3 "" H 700 3400 60  0000 C CNN
+	1    700  3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	950  3200 700  3200
+Wire Wire Line
+	700  3200 700  3300
+Wire Wire Line
+	950  3600 700  3600
+Wire Wire Line
+	700  3600 700  3500
+Connection ~ 850  3200
+Connection ~ 850  3600
+$Comp
+L +24V #PWR011
+U 1 1 5546633C
+P 4950 2700
+F 0 "#PWR011" H 4950 2550 50  0001 C CNN
+F 1 "+24V" H 4950 2840 50  0000 C CNN
+F 2 "" H 4950 2700 60  0000 C CNN
+F 3 "" H 4950 2700 60  0000 C CNN
+	1    4950 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR012
+U 1 1 5546634E
+P 4950 3800
+F 0 "#PWR012" H 4950 3550 50  0001 C CNN
+F 1 "GND" H 4950 3650 50  0000 C CNN
+F 2 "" H 4950 3800 60  0000 C CNN
+F 3 "" H 4950 3800 60  0000 C CNN
+	1    4950 3800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4650 3050 4600 3050
+Wire Wire Line
+	4600 3050 4600 3450
+Wire Wire Line
+	4600 3450 4500 3450
+Wire Wire Line
+	4950 3250 4950 3450
+Wire Wire Line
+	4500 3650 4950 3650
+Wire Wire Line
+	4950 3650 4950 3800
+Text Label 5900 3750 0    60   ~ 0
+coin_cnt
+$Comp
+L LTV-817 U3
+U 1 1 554670C0
+P 7300 3650
+F 0 "U3" H 7100 3850 50  0000 L CNN
+F 1 "LTV-817" H 7300 3850 50  0000 L CNN
+F 2 "DIP-4" H 7100 3450 50  0000 L CIN
+F 3 "" H 7300 3550 50  0000 L CNN
+	1    7300 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5900 3750 7000 3750
+Wire Wire Line
+	6850 3350 6850 3550
+Wire Wire Line
+	6850 3550 7000 3550
+Text Label 8450 3550 2    60   ~ 0
+opt_out
+$Comp
+L +24V #PWR013
+U 1 1 55467344
+P 6850 3150
+F 0 "#PWR013" H 6850 3000 50  0001 C CNN
+F 1 "+24V" H 6850 3290 50  0000 C CNN
+F 2 "" H 6850 3150 60  0000 C CNN
+F 3 "" H 6850 3150 60  0000 C CNN
+	1    6850 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5VD #PWR014
+U 1 1 554678EA
+P 7900 3250
+F 0 "#PWR014" H 7900 3100 50  0001 C CNN
+F 1 "+5VD" H 7900 3390 50  0000 C CNN
+F 2 "" H 7900 3250 60  0000 C CNN
+F 3 "" H 7900 3250 60  0000 C CNN
+	1    7900 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L GNDD #PWR015
+U 1 1 55467A9E
+P 7900 3900
+F 0 "#PWR015" H 7900 3650 50  0001 C CNN
+F 1 "GNDD" H 7900 3750 50  0000 C CNN
+F 2 "" H 7900 3900 60  0000 C CNN
+F 3 "" H 7900 3900 60  0000 C CNN
+	1    7900 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_Small R4
+U 1 1 55467EA3
+P 7900 3350
+F 0 "R4" H 7930 3370 50  0000 L CNN
+F 1 "1k" H 7930 3310 50  0000 L CNN
+F 2 "" H 7900 3350 60  0000 C CNN
+F 3 "" H 7900 3350 60  0000 C CNN
+	1    7900 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7900 3450 7900 3550
+Wire Wire Line
+	7600 3550 8450 3550
+Connection ~ 7900 3550
+Wire Wire Line
+	7600 3750 7900 3750
+Wire Wire Line
+	7900 3750 7900 3900
+$Comp
+L R_Small R2
+U 1 1 55468D1B
+P 3750 3150
+F 0 "R2" H 3780 3170 50  0000 L CNN
+F 1 "250" H 3780 3110 50  0000 L CNN
+F 2 "" H 3750 3150 60  0000 C CNN
+F 3 "" H 3750 3150 60  0000 C CNN
+	1    3750 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_Small R1
+U 1 1 55468EFB
+P 5050 1300
+F 0 "R1" H 5080 1320 50  0000 L CNN
+F 1 "250" H 5080 1260 50  0000 L CNN
+F 2 "" H 5050 1300 60  0000 C CNN
+F 3 "" H 5050 1300 60  0000 C CNN
+	1    5050 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_Small R3
+U 1 1 5546920A
+P 6850 3250
+F 0 "R3" H 6880 3270 50  0000 L CNN
+F 1 "600 (12) 1k2 (24)" H 6880 3210 50  0000 L CNN
+F 2 "" H 6850 3250 60  0000 C CNN
+F 3 "" H 6850 3250 60  0000 C CNN
+	1    6850 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG016
+U 1 1 55469EDE
+P 1200 3350
+F 0 "#FLG016" H 1200 3445 50  0001 C CNN
+F 1 "PWR_FLAG" H 1200 3530 50  0000 C CNN
+F 2 "" H 1200 3350 60  0000 C CNN
+F 3 "" H 1200 3350 60  0000 C CNN
+	1    1200 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG017
+U 1 1 55469F00
+P 1200 3450
+F 0 "#FLG017" H 1200 3545 50  0001 C CNN
+F 1 "PWR_FLAG" H 1200 3630 50  0000 C CNN
+F 2 "" H 1200 3450 60  0000 C CNN
+F 3 "" H 1200 3450 60  0000 C CNN
+	1    1200 3450
+	-1   0    0    1   
+$EndComp
+Connection ~ 1200 3350
+Connection ~ 1200 3450
+$Comp
+L PWR_FLAG #FLG018
+U 1 1 5546A35F
+P 1350 1200
+F 0 "#FLG018" H 1350 1295 50  0001 C CNN
+F 1 "PWR_FLAG" H 1350 1380 50  0000 C CNN
+F 2 "" H 1350 1200 60  0000 C CNN
+F 3 "" H 1350 1200 60  0000 C CNN
+	1    1350 1200
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG019
+U 1 1 5546A381
+P 1350 1300
+F 0 "#FLG019" H 1350 1395 50  0001 C CNN
+F 1 "PWR_FLAG" H 1350 1480 50  0000 C CNN
+F 2 "" H 1350 1300 60  0000 C CNN
+F 3 "" H 1350 1300 60  0000 C CNN
+	1    1350 1300
+	-1   0    0    1   
+$EndComp
+Connection ~ 1350 1200
+Connection ~ 1350 1300
+Wire Wire Line
+	4950 2700 4950 2850
+Wire Wire Line
+	5800 2000 8050 2000
+NoConn ~ 6250 1450
+Connection ~ 7550 1500
+Wire Wire Line
+	6900 2400 6900 1800
+Connection ~ 7550 2000
+Connection ~ 6900 2000
+Wire Wire Line
+	6250 1150 5900 1150
+$Comp
+L PROFET Q1
+U 1 1 5546C062
+P 6900 1300
+F 0 "Q1" H 6900 1250 60  0000 C CNN
+F 1 "BTS430K2" H 6900 1350 60  0000 C CNN
+F 2 "" H 6900 1300 60  0000 C CNN
+F 3 "" H 6900 1300 60  0000 C CNN
+	1    6900 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L BC807-40 Q2
+U 1 1 5546C528
+P 4850 3050
+F 0 "Q2" H 5050 3125 50  0000 L CNN
+F 1 "BC807-40" H 5050 3050 50  0000 L CNN
+F 2 "SOT-23" H 5050 2975 50  0000 L CIN
+F 3 "" H 4850 3050 50  0000 L CNN
+	1    4850 3050
+	1    0    0    1   
+$EndComp
+$Comp
+L R_Small R?
+U 1 1 5546D1A6
+P 6350 3450
+F 0 "R?" H 6380 3470 50  0000 L CNN
+F 1 "47k" H 6380 3410 50  0000 L CNN
+F 2 "" H 6350 3450 60  0000 C CNN
+F 3 "" H 6350 3450 60  0000 C CNN
+	1    6350 3450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6350 3550 6350 3750
+Connection ~ 6350 3750
+Wire Wire Line
+	6850 3150 6350 3150
+Wire Wire Line
+	6350 3150 6350 3350
+$EndSCHEMATC

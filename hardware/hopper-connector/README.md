@@ -1,0 +1,1 @@
+This is a connector-PCB between coin hopper and mdb-interface-PCB.
