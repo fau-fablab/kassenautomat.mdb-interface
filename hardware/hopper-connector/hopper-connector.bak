@@ -167,7 +167,7 @@ L D D2
 U 1 1 55462252
 P 8050 1750
 F 0 "D2" H 8050 1850 50  0000 C CNN
-F 1 "D" H 8050 1650 50  0000 C CNN
+F 1 "1N4004" H 8050 1650 50  0000 C CNN
 F 2 "" H 8050 1750 60  0000 C CNN
 F 3 "" H 8050 1750 60  0000 C CNN
 	1    8050 1750
@@ -688,4 +688,6 @@ Wire Wire Line
 Connection ~ 3350 1850
 Connection ~ 3800 1450
 Connection ~ 3800 1850
+Text Notes 2200 2050 0    20   ~ 0
+use stronger TRANSIL?\nThis one will burn before fuse triggers.\n(Only really relevant in case of wrong polarity\nof power supply) Datasheet says the diode\nfails short so at least the protection works...
 $EndSCHEMATC
