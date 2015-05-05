@@ -854,4 +854,6 @@ Text Notes 6500 4300 0    60   ~ 0
 LTV-357T\nassumed CTR (at Vce = 1V) = 25%
 Text Notes 2550 1400 0    60   ~ 0
 5W resistor
+Text Notes 2250 3700 0    60   ~ 0
+connect\nPin 1-2 to 5V-BAK-connector\nPin 3-4 to K1\nPin 5-6 to K2\n
 $EndSCHEMATC
