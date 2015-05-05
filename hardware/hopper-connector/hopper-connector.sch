@@ -37,8 +37,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "hopper-interface"
-Date "Sa 02 Mai 2015"
-Rev "r0"
+Date "Di 05 Mai 2015"
+Rev "r1"
 Comp "Patrick Kanzler, FAU FabLab"
 Comment1 ""
 Comment2 "to the mdb-interface-PCB"
@@ -150,57 +150,46 @@ $EndComp
 $Comp
 L +24V #PWR03
 U 1 1 55462180
-P 6900 800
-F 0 "#PWR03" H 6900 650 50  0001 C CNN
-F 1 "+24V" H 6900 940 50  0000 C CNN
-F 2 "" H 6900 800 60  0000 C CNN
-F 3 "" H 6900 800 60  0000 C CNN
-	1    6900 800 
+P 7250 800
+F 0 "#PWR03" H 7250 650 50  0001 C CNN
+F 1 "+24V" H 7250 940 50  0000 C CNN
+F 2 "" H 7250 800 60  0000 C CNN
+F 3 "" H 7250 800 60  0000 C CNN
+	1    7250 800 
 	1    0    0    -1  
 $EndComp
-Text Label 7850 1700 2    60   ~ 0
+Text Label 8200 1700 2    60   ~ 0
 V_mot
 Wire Wire Line
-	7550 1700 7850 1700
+	7900 1700 8200 1700
 $Comp
 L D D2
 U 1 1 55462252
-P 8050 1750
-F 0 "D2" H 8050 1850 50  0000 C CNN
-F 1 "1N4004" H 8050 1650 50  0000 C CNN
-F 2 "" H 8050 1750 60  0000 C CNN
-F 3 "" H 8050 1750 60  0000 C CNN
-	1    8050 1750
+P 8400 1750
+F 0 "D2" H 8400 1850 50  0000 C CNN
+F 1 "1N4004" H 8400 1650 50  0000 C CNN
+F 2 "" H 8400 1750 60  0000 C CNN
+F 3 "" H 8400 1750 60  0000 C CNN
+	1    8400 1750
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	8050 1500 8050 1600
+	8400 1500 8400 1600
 Wire Wire Line
-	8050 2000 8050 1900
-Text Label 7850 1850 2    60   ~ 0
+	8400 2000 8400 1900
+Text Label 8200 1850 2    60   ~ 0
 V_0
 Wire Wire Line
-	7550 1850 7850 1850
+	7900 1850 8200 1850
 $Comp
 L GND #PWR04
 U 1 1 554623B9
-P 6900 2400
-F 0 "#PWR04" H 6900 2150 50  0001 C CNN
-F 1 "GND" H 6900 2250 50  0000 C CNN
-F 2 "" H 6900 2400 60  0000 C CNN
-F 3 "" H 6900 2400 60  0000 C CNN
-	1    6900 2400
-	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_01X05 P5
-U 1 1 5546249B
-P 2100 3550
-F 0 "P5" H 2100 3850 50  0000 C CNN
-F 1 "CONN_01X05" V 2200 3550 50  0000 C CNN
-F 2 "" H 2100 3550 60  0000 C CNN
-F 3 "" H 2100 3550 60  0000 C CNN
-	1    2100 3550
+P 7250 2400
+F 0 "#PWR04" H 7250 2150 50  0001 C CNN
+F 1 "GND" H 7250 2250 50  0000 C CNN
+F 2 "" H 7250 2400 60  0000 C CNN
+F 3 "" H 7250 2400 60  0000 C CNN
+	1    7250 2400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -300,9 +289,9 @@ Wire Wire Line
 Text Label 5650 3550 2    60   ~ 0
 V_opto
 Wire Wire Line
-	8050 1500 7550 1500
+	8400 1500 7900 1500
 Wire Wire Line
-	7550 1850 7550 2000
+	7900 1850 7900 2000
 Wire Wire Line
 	5800 1800 5800 2000
 Wire Wire Line
@@ -481,20 +470,19 @@ Connection ~ 1200 3450
 Wire Wire Line
 	5150 2800 5150 2950
 Wire Wire Line
-	5800 2000 8050 2000
-NoConn ~ 6250 1450
-Connection ~ 7550 1500
-Connection ~ 7550 2000
-Connection ~ 6900 2000
+	5800 2000 8400 2000
+Connection ~ 7900 1500
+Connection ~ 7900 2000
+Connection ~ 7250 2000
 $Comp
 L PROFET Q2
 U 1 1 5546C062
-P 6900 1300
-F 0 "Q2" H 6900 1250 60  0000 C CNN
-F 1 "BTS430K2" H 6900 1350 60  0000 C CNN
-F 2 "" H 6900 1300 60  0000 C CNN
-F 3 "" H 6900 1300 60  0000 C CNN
-	1    6900 1300
+P 7250 1300
+F 0 "Q2" H 7250 1250 60  0000 C CNN
+F 1 "BTS430K2" H 7250 1350 60  0000 C CNN
+F 2 "" H 7250 1300 60  0000 C CNN
+F 3 "" H 7250 1300 60  0000 C CNN
+	1    7250 1300
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -557,15 +545,9 @@ F 3 "" H 7300 3650 50  0000 L CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6250 1150 6100 1150
+	7900 1300 7900 1700
 Wire Wire Line
-	6100 1150 6100 1700
-Wire Wire Line
-	6100 1700 5800 1700
-Wire Wire Line
-	7550 1300 7550 1700
-Wire Wire Line
-	6900 1800 6900 2400
+	7250 1800 7250 2400
 NoConn ~ 4500 3450
 NoConn ~ 5800 1600
 NoConn ~ 7600 3550
@@ -690,4 +672,29 @@ Connection ~ 3800 1450
 Connection ~ 3800 1850
 Text Notes 2200 2050 0    20   ~ 0
 use stronger TRANSIL?\nThis one will burn before fuse triggers.\n(Only really relevant in case of wrong polarity\nof power supply) Datasheet says the diode\nfails short so at least the protection works...
+Text Label 6100 1450 0    60   ~ 0
+profet_st
+Wire Wire Line
+	6600 1450 6100 1450
+Wire Wire Line
+	6600 1150 6050 1150
+Wire Wire Line
+	6050 1150 6050 1700
+Wire Wire Line
+	6050 1700 5800 1700
+$Comp
+L CONN_01X06 P5
+U 1 1 55487484
+P 2100 3600
+F 0 "P5" H 2100 3950 50  0000 C CNN
+F 1 "CONN_01X06" V 2200 3600 50  0000 C CNN
+F 2 "" H 2100 3600 60  0000 C CNN
+F 3 "" H 2100 3600 60  0000 C CNN
+	1    2100 3600
+	1    0    0    -1  
+$EndComp
+Text Label 1400 3850 0    60   ~ 0
+profet_st
+Wire Wire Line
+	1900 3850 1400 3850
 $EndSCHEMATC
