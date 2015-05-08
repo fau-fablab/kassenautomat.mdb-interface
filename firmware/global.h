@@ -48,7 +48,7 @@
 
 #include <util/delay.h>
 
-void delayms (uint16_t ms)
+static inline void delayms (uint16_t ms)
 {
 	while (ms) {
 		_delay_ms(1);
@@ -56,7 +56,7 @@ void delayms (uint16_t ms)
 	}
 }
 
-void delayus (uint16_t us)
+static inline void delayus (uint16_t us)
 {
 	while (us) {
 		_delay_us(1);
@@ -64,7 +64,7 @@ void delayus (uint16_t us)
 	}
 }
 
-inline static void delayus_inline (uint16_t us)
+static inline void delayus_inline (uint16_t us)
 {
 	while (us) {
 		_delay_us(1);

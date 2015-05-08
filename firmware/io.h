@@ -48,6 +48,7 @@
 		} \
 	} while(false)
 
+#define setBit(port, bit, state) out(port, bit, 0, state)
 
 inline uint8_t input_(uint8_t addr, uint8_t port)
 {				//addr=PIN(A-E), port=P(A-E)(0-7)

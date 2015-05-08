@@ -53,7 +53,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c
+SRC = $(TARGET).c task_hopper.c
 
 
 # List Assembler source files here.
