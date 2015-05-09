@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PROFET
+D PROFET BTS430K
+K PROFET, Highside-Switch
+$ENDCMP
+#
+#End Doc Library
