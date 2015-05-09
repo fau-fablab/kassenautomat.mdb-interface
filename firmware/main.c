@@ -91,8 +91,7 @@ uint8_t hexNibbleToAscii(uint8_t x) {
 
 
 void task_comm(void) {
-	static databuf cmd, resp;
-#warning TODO do we need to call databufReset(&cmd), &resp at startup? I think no.
+	static databuf cmd, resp; // initialised to zero because they are static variables, otherwise databufReset(&cmd), ...(&resp) would have to be called! see http://stackoverflow.com/a/4081193
 	
 	static uint8_t cmdBytesSent=0;
 	static uint8_t respChk=0;
