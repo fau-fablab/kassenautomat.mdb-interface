@@ -52,11 +52,16 @@ void __attribute__((noreturn)) fatal_real(const char * PROGMEM str, uint8_t d) {
 
 #include "databuf.h"
 
-databuf cmd, resp;
-uint8_t cmdBytesSent=0;
-uint8_t respChk=0;
-uint8_t respLen=0;
-uint8_t timeout=0;
+typedef enum { CONSTANT, BLINK, TIMEOUT } rgb_mode_enum;
+rgb_mode_enum rgb_led_mode[2] = {TIMEOUT, TIMEOUT};
+uint8_t rgb_led_red[2] = {100, 100};
+uint8_t rgb_led_blue[2] = {50, 50};
+uint8_t rgb_led_green[2] = {100, 100};
+uint32_t rgb_led_timer[2]= {0, 0}; 
+
+
+rgb_mode_enum asciiToRGBMode(uint8_t x);
+
 
 uint8_t asciiNibbleToHex(uint8_t ascii) {
 	if (('0' <= ascii) && (ascii <= '9')) {
@@ -84,21 +89,16 @@ uint8_t hexNibbleToAscii(uint8_t x) {
 	}
 }
 
-rgb_mode_enum asciiToRGBMode(uint8_t x) {
-	if (x=='N') {
-		return CONSTANT;
-	} else if (x=='B') {
-		return BLINK;
-	} else if (x=='T') {
-		return TIMEOUT;
-	} else {
-		FATAL("invalid LED mode");
-		return CONSTANT;
-	}
-}
-
 
 void task_comm(void) {
+	static databuf cmd, resp;
+#warning TODO do we need to call databufReset(&cmd), &resp at startup? I think no.
+	
+	static uint8_t cmdBytesSent=0;
+	static uint8_t respChk=0;
+	static uint8_t respLen=0;
+	static uint8_t timeout=0;
+
 	static enum {READ_CMD, PROCESS_MDB_CMD, PROCESS_EXTENSION_CMD, READ_MDB_RESP, SEND_RESP_TO_PC}
 		state = READ_CMD;
 	
@@ -144,7 +144,7 @@ void task_comm(void) {
 				}
 			} else if (state == PROCESS_EXTENSION_CMD) {
 				readData(&cmd); // discard "X"
-				uint8_t tmp=readData(&cmd);
+				uint8_t tmp = readData(&cmd);
 				if (tmp == 'L') {
 					/**
 					 * LED Protocol:
@@ -157,15 +157,18 @@ void task_comm(void) {
 					 */
 					// LED command
 					for (uint8_t i=0; i<=1; i++) {
-						rgb_led_red[i]=readAsciiHexbyte(&cmd);
-						rgb_led_green[i]=readAsciiHexbyte(&cmd);
-						rgb_led_blue[i]=readAsciiHexbyte(&cmd);
-						rgb_led_mode[i]=asciiToRGBMode(readData(&cmd));
-						rgb_led_timer[i]=0;
+						rgb_led_red[i] = readAsciiHexbyte(&cmd);
+						rgb_led_green[i] = readAsciiHexbyte(&cmd);
+						rgb_led_blue[i] = readAsciiHexbyte(&cmd);
+						rgb_led_mode[i] = asciiToRGBMode(readData(&cmd));
+						rgb_led_timer[i] = 0;
 					}
 					if (hasData(&cmd)) {
 						FATAL("extra data at end of LED cmd");
 					}
+					storeData(&resp, 'O');
+					storeData(&resp, 'K');
+					state = SEND_RESP_TO_PC;
 				} else if (tmp=='H') {
 					/**
 					 * Hopper Protocol:
@@ -173,10 +176,11 @@ void task_comm(void) {
 					 * command: H
 					 * 
 					 * response:
+					 * A  = ACK: command received, starting a dispense operation, please resend to poll for the result
+					 *  B = busy, please resend command until you receive something else than busy (must not take more than 3 seconds)
 					 *  E01  = out of service because of a serious error #01.
 					 *         01 is the hexadecimal error number from hopperErrorEnum in task_hopper.h
 					 *         Please reset board to exit this state, otherwise all hopper requests will be ignored and answered with this error.
-					 *  B = busy, please resend command until you receive something else than busy (must not take more than 3 seconds)
 					 *  RD = okay, dispensed a coin
 					 *  RE = okay, hopper is empty, could not dispense a coin
 					 */
@@ -314,12 +318,18 @@ void rgb_set_pwm(uint8_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t alpha) 
  * RGB LED
  ***********************************/
 
-typedef enum { CONSTANT, BLINK, TIMEOUT } rgb_mode_enum;
-rgb_mode_enum rgb_led_mode[2] = {TIMEOUT, TIMEOUT};
-uint8_t rgb_led_red[2] = {100, 100};
-uint8_t rgb_led_blue[2] = {50, 50};
-uint8_t rgb_led_green[2] = {100, 100};
-uint16_t rgb_led_timer[2]= {0, 0}; 
+rgb_mode_enum asciiToRGBMode(uint8_t x) {
+	if (x=='N') {
+		return CONSTANT;
+	} else if (x=='B') {
+		return BLINK;
+	} else if (x=='T') {
+		return TIMEOUT;
+	} else {
+		FATAL("invalid LED mode");
+		return CONSTANT;
+	}
+}
 
 void task_rgb_led(void) {
 	// slow down blinking / fadeout by 2^n. n=0 means 255/TICKS_PER_MS = 40 milliseconds 
@@ -328,7 +338,7 @@ void task_rgb_led(void) {
 	
 	const uint8_t TIMEOUT_SECONDS = 20; // how many seconds until fadeout?
 	
-	const uint8_t FADEOUT_START= TIMEOUT_SECONDS * 1000 * TICKS_PER_MS;
+	const uint32_t FADEOUT_START= TIMEOUT_SECONDS * 1000 * TICKS_PER_MS;
 	
 	for (uint8_t index=0; index <= 1; index++) {
 		uint8_t alpha=255;
@@ -403,9 +413,6 @@ int main(void) {
 	PORTD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
         DDRB |= (1<<PB3) | (1<<PB4);
         PORTB |= (1<<PB3) | (1<<PB4);
-        
-	databufReset(&cmd);
-	databufReset(&resp);
         
 	// send one byte so that txReady() works
 	uartPC_tx('\n');
