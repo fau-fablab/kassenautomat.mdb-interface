@@ -35,13 +35,7 @@
 #define LED_AMBER(x) out(LED_PORT,LED_AMBER_PIN,0,x)	// DO NOT CHANGE
 #define LED_BLUE(x) out(LED_PORT,LED_BLUE_PIN,0,x)	// DO NOT CHANGE
 
-// RGB LED siehe weiter unten im Programm
-typedef enum { CONSTANT, BLINK, TIMEOUT } rgb_mode_enum;
-rgb_mode_enum rgb_led_mode[2] = {CONSTANT, CONSTANT};
-uint8_t rgb_led_red[2] = {0, 0};
-uint8_t rgb_led_blue[2] = {0, 0};
-uint8_t rgb_led_green[2] = {0, 0};
-uint16_t rgb_led_timer[2]={0, 0}; 
+
 
 
 uint8_t hexNibbleToAscii(uint8_t x);
@@ -316,11 +310,26 @@ void rgb_set_pwm(uint8_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t alpha) 
 	}
 }
 
-void task_rgb_led(void) {
-	// slow down blinking / fadeout by 2^n
-	const uint8_t BLINK_FREQUENCY_DIVIDER=3;
-	const uint8_t TIMEOUT_FADEOUT_DIVIDER=3;
+/************************************
+ * RGB LED
+ ***********************************/
 
+typedef enum { CONSTANT, BLINK, TIMEOUT } rgb_mode_enum;
+rgb_mode_enum rgb_led_mode[2] = {TIMEOUT, TIMEOUT};
+uint8_t rgb_led_red[2] = {100, 100};
+uint8_t rgb_led_blue[2] = {50, 50};
+uint8_t rgb_led_green[2] = {100, 100};
+uint16_t rgb_led_timer[2]= {0, 0}; 
+
+void task_rgb_led(void) {
+	// slow down blinking / fadeout by 2^n. n=0 means 255/TICKS_PER_MS = 40 milliseconds 
+	const uint8_t BLINK_FREQUENCY_DIVIDER=4;
+	const uint8_t TIMEOUT_FADEOUT_DIVIDER=6;
+	
+	const uint8_t TIMEOUT_SECONDS = 20; // how many seconds until fadeout?
+	
+	const uint8_t FADEOUT_START= TIMEOUT_SECONDS * 1000 * TICKS_PER_MS;
+	
 	for (uint8_t index=0; index <= 1; index++) {
 		uint8_t alpha=255;
 		switch (rgb_led_mode[index]) {
@@ -329,18 +338,22 @@ void task_rgb_led(void) {
 				break;
 			case BLINK:
 				rgb_led_timer[index]++;
-				if (rgb_led_timer[index] > (255 << BLINK_FREQUENCY_DIVIDER)) {
+				if (rgb_led_timer[index] > ((255+256) << BLINK_FREQUENCY_DIVIDER)) {
 					rgb_led_timer[index]=0;
 				}
-				alpha=rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER;
+				alpha=(rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER)%256;
 			case TIMEOUT:
-				if (rgb_led_timer[index] > 0) {
-					rgb_led_timer[index]--;
-				}
-				if ( rgb_led_timer[index] < (255 << TIMEOUT_FADEOUT_DIVIDER) ) {
-					alpha = rgb_led_timer[index] >> TIMEOUT_FADEOUT_DIVIDER;
-				} else {
+				if (rgb_led_timer[index] < FADEOUT_START) {
+					// phase 1: stay on fully
+					rgb_led_timer[index]++;
 					alpha = 255;
+				} else if (rgb_led_timer[index] < FADEOUT_START + (255 << TIMEOUT_FADEOUT_DIVIDER)) {
+					// phase 2: slowly fade to black
+					rgb_led_timer[index]++;
+					alpha = 255 - ((rgb_led_timer[index] - FADEOUT_START) >> TIMEOUT_FADEOUT_DIVIDER);
+				} else {
+					// phase 3: stay off
+					alpha = 0;
 				}
 				break;
 		}
@@ -385,19 +398,16 @@ int main(void) {
 	DDRD |= (1<<PD3) | (1<<PD1);
         
         
-        // RGB LED
-        // TODO erstmal dauerhaft an
+        // RGB LEDs switched on at start, later overriden by timer PWM output
         DDRD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
-	
-        PORTD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
-	
+	PORTD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
         DDRB |= (1<<PB3) | (1<<PB4);
         PORTB |= (1<<PB3) | (1<<PB4);
         
 	databufReset(&cmd);
 	databufReset(&resp);
         
-	// erstmal ein byte senden, damit txReady funktioniert
+	// send one byte so that txReady() works
 	uartPC_tx('\n');
 	uartBus_tx(0xFF,1);
 	
@@ -428,7 +438,7 @@ int main(void) {
         while(1) {
 		wdt_reset();
                 // ATTENTION, no delays allowed in this loop.
-		// fixed loop runtime is (0xFF * timer1 prescaler)/F_CPU = 170µs
+		// fixed loop runtime is (0xFF * timer1 prescaler)/F_CPU = 170µs with prescaler=8 and F_CPU=12MHz
 		// sleep_remaining_time() eats the remaning time.
 		// UART buffer overruns would occur at a runtime of more than 8bit/(38.4kbit/s)=208µs
 		

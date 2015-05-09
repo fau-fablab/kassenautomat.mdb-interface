@@ -32,17 +32,18 @@ hopperErrorEnum hopperError = HOPPER_OKAY;
 
 #warning TODO hopper IO pins
 
-#define HOPPER_PORT_MOTOR PORTC
-#define HOPPER_DDR_MOTOR DDRC
-#define HOPPER_PIN_MOTOR PC5
+#define HOPPER_PORT_MOTOR PORTA
+#define HOPPER_DDR_MOTOR DDRA
+#define HOPPER_PIN_MOTOR PA2
 
 #define HOPPER_DDR_OPTOSUPPLY DDRA
-#define HOPPER_PIN_OPTOSUPPLY PA0
+#define HOPPER_PIN_OPTOSUPPLY PA3
 #define HOPPER_PORT_OPTOSUPPLY PORTA
 
-#define HOPPER_INPORT_SENSOR PINC
-#define HOPPER_PIN_SENSOR PC4
+#define HOPPER_INPORT_SENSOR PINA
+#define HOPPER_PIN_SENSOR PA5
 
+#warning TODO read PROFET status output
 
 inline void hopperOptoSupply(uint8_t on) {
 	out(HOPPER_PORT_OPTOSUPPLY,HOPPER_PIN_OPTOSUPPLY,0,on);
@@ -53,7 +54,7 @@ inline void hopperMotor(uint8_t on) {
 }
 
 inline uint8_t hopperCoinPresent(void) {
-	return in(HOPPER_INPORT_SENSOR, HOPPER_PIN_SENSOR, 0);
+	return in(HOPPER_INPORT_SENSOR, HOPPER_PIN_SENSOR, 1);
 }
 
 inline void hopper_init(void) {
