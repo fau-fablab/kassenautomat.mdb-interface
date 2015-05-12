@@ -55,7 +55,7 @@ void __attribute__((noreturn)) fatal_real(const char * PROGMEM str, uint8_t d) {
 typedef enum { CONSTANT, BLINK, TIMEOUT } rgb_mode_enum;
 rgb_mode_enum rgb_led_mode[2] = {TIMEOUT, TIMEOUT};
 uint8_t rgb_led_red[2] = {100, 100};
-uint8_t rgb_led_blue[2] = {50, 50};
+uint8_t rgb_led_blue[2] = {100, 100};
 uint8_t rgb_led_green[2] = {100, 100};
 uint32_t rgb_led_timer[2]= {0, 0}; 
 
@@ -108,7 +108,7 @@ void task_comm(void) {
 				uint8_t d=uartPC_rx();
 				// uartPC_tx_blocking(d); // als "loopback" test - PC-Software ist nicht dafür gedacht, also nur für händisches Testen einkommentieren
 				if (d=='\r' || d=='\n') {
-					if (peekData(&cmd) == 'X') {
+					if (hasData(&cmd) && (peekData(&cmd) == 'X')) {
 						state = PROCESS_EXTENSION_CMD;
 					} else {
 						state=PROCESS_MDB_CMD;
@@ -159,16 +159,22 @@ void task_comm(void) {
 						rgb_led_red[i] = readAsciiHexbyte(&cmd);
 						rgb_led_green[i] = readAsciiHexbyte(&cmd);
 						rgb_led_blue[i] = readAsciiHexbyte(&cmd);
-						rgb_led_mode[i] = asciiToRGBMode(readData(&cmd));
-						rgb_led_timer[i] = 0;
+						rgb_mode_enum newMode = asciiToRGBMode(readData(&cmd));
+						if (!((rgb_led_mode[i] == newMode) && (rgb_led_mode[i] == BLINK)))  {
+							// reset timer, but not for an unchanged blink mode (then the sequence looks stupid)
+							rgb_led_timer[i] = 0;
+						}
+						rgb_led_mode[i] = newMode;
 					}
 					if (hasData(&cmd)) {
 						FATAL("extra data at end of LED cmd");
 					}
+					storeData(&resp, 'R');
+					storeData(&resp, ':');
 					storeData(&resp, 'O');
 					storeData(&resp, 'K');
 					state = SEND_RESP_TO_PC;
-				} else if (tmp=='H') {
+				} else if (tmp == 'H') {
 					/**
 					 * Hopper Protocol:
 					 * 
@@ -184,6 +190,8 @@ void task_comm(void) {
 					 *  RE = okay, hopper is empty, could not dispense a coin
 					 */
 					// hopper command (PC repeats this until the reply is not "busy")
+					storeData(&resp, 'R');
+					storeData(&resp, ':');
 					if (hopper_get_error() != HOPPER_OKAY) {
 						storeData(&resp, 'E'); // error, will not payout any coins anymore.
 						storeHexNibbleAsAscii(&resp, (uint8_t) hopper_get_error());
@@ -253,9 +261,9 @@ void task_comm(void) {
 
 			} else {
 				// uartBus_rx not ready
-				_delay_us(100);
 				timeout++;
 				if (timeout >= 50) {
+					// took longer than 50ms/TICKS_PER_MS ~= 8ms
 					databufReset(&resp);
 					storeData(&resp,'R');
 					storeData(&resp,'T');
@@ -283,33 +291,34 @@ void task_comm(void) {
 }
 
 void init_timer(void) {
-	TCCR0A = (1 << COM0A1) | (1 << COM0B1) | (1 << WGM01) | (1 << WGM00); // non-inverting fast PWM
+	TCCR0A = (1 << COM0A1) | (1 << COM0B1) | (1 << WGM00); // non-inverting fast PWM
 	TCCR0B = (1 << CS01); // use system clock / 8
 	
-	TCCR2A = (1 << COM2A1) | (1 << COM2B1) | (1 << WGM21) | (1 << WGM20); // non-inverting fast PWM
+	TCCR2A = (1 << COM2A1) | (1 << COM2B1) | (1 << WGM20); // non-inverting fast PWM
 	TCCR2B = (1 << CS21); // use system clock / 8
 
 	// Timer1 is 16bit and a little different
-	// 8bit noninverting fast PWM
-	TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM10); // non-inverting fast PWM
+	// 8bit *inverting* fast PWM
+	// WORKAROUND: Atmel fast PWM does not go down to 0%, but still outputs a narrow spike at 0.
+	// 255 = 100% is possible, so we use inverted mode.
+	TCCR1A = (1 << COM1A0) | (1 << COM1A1) | (1 << COM1B0) | (1 << COM1B1) | (1 << WGM10); // non-inverting fast PWM
 	TCCR1B = (1 << WGM12)  | (1 << CS11); // use system clock / 8
-	
 	TIFR1 = (1<<TOV1); // clear overflow on first run
 }
 
 // set RGB LED no. $index
 void rgb_set_pwm(uint8_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t alpha) {
-	r=r*alpha>>8;
-	g=g*alpha>>8;
-	b=b*alpha>>8;
-	if (index == 0) {
-		OCR1B=r;
-		OCR1A=g;
-		OCR2B=b;
-	} else {
+	r=(r*alpha)>>8;
+	g=(g*alpha)>>8;
+	b=(b*alpha)>>8;
+	if (index == 1) {
 		OCR2A=r;
 		OCR0A=g;
 		OCR0B=b;
+	} else {
+		OCR1B=255-r; // inverted PWM mode! see init_timer()
+		OCR1A=255-g; // inverted PWM mode! see init_timer()
+		OCR2B=b;
 	}
 }
 
@@ -333,7 +342,7 @@ rgb_mode_enum asciiToRGBMode(uint8_t x) {
 void task_rgb_led(void) {
 	// slow down blinking / fadeout by 2^n. n=0 means 255/TICKS_PER_MS = 40 milliseconds 
 	const uint8_t BLINK_FREQUENCY_DIVIDER=4;
-	const uint8_t TIMEOUT_FADEOUT_DIVIDER=6;
+	const uint8_t TIMEOUT_FADEOUT_DIVIDER=5;
 	
 	const uint8_t TIMEOUT_SECONDS = 20; // how many seconds until fadeout?
 	
@@ -347,10 +356,15 @@ void task_rgb_led(void) {
 				break;
 			case BLINK:
 				rgb_led_timer[index]++;
-				if (rgb_led_timer[index] > ((255+256) << BLINK_FREQUENCY_DIVIDER)) {
+				if (rgb_led_timer[index] < (256 << BLINK_FREQUENCY_DIVIDER)) {
+					alpha=rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER;
+				} else {
+					alpha=255-(rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER);
+				}
+				if (rgb_led_timer[index] >= ((255+256) << BLINK_FREQUENCY_DIVIDER)) {
 					rgb_led_timer[index]=0;
 				}
-				alpha=(rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER)%256;
+				break;
 			case TIMEOUT:
 				if (rgb_led_timer[index] < FADEOUT_START) {
 					// phase 1: stay on fully
@@ -409,10 +423,10 @@ int main(void) {
         
         // RGB LEDs switched on at start, later overriden by timer PWM output
         DDRD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
-	PORTD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
+//  	PORTD |= (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
         DDRB |= (1<<PB3) | (1<<PB4);
-        PORTB |= (1<<PB3) | (1<<PB4);
-        
+//           PORTB |= (1<<PB3) | (1<<PB4);
+        init_timer();
 	// send one byte so that txReady() works
 	uartPC_tx('\n');
 	uartBus_tx(0xFF,1);
@@ -424,8 +438,8 @@ int main(void) {
 		delayms(1000);
 		
 		uartPC_tx_pstr(PSTR("TEST active\n"));     
-		while(1) {
-			LED_PORT ^= (1<<LED_AMBER_PIN);
+		while (1) {
+ 			LED_PORT ^= (1<<LED_AMBER_PIN);
 			if (uartPC_rx_ready()) {
 				uint8_t d=uartPC_rx();
 				uartPC_tx_pstr(PSTR("RX:"));
@@ -450,7 +464,9 @@ int main(void) {
 		
                 task_comm();
 		task_rgb_led();
-		task_hopper();
+		// TODO hopper untested
+#warning TODO hopper disabled
+		//task_hopper();
 		
                 // TODO sleep for...
                 sleep_remaining_time();
