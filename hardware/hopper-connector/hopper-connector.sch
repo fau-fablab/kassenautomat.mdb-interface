@@ -85,28 +85,6 @@ Text Label 850  5000 0    60   ~ 0
 coin_cnt
 Text Label 850  5700 0    60   ~ 0
 coin_cnt
-$Comp
-L CONN_01X02 P2
-U 1 1 5544CE5E
-P 1100 1500
-F 0 "P2" H 1100 1650 50  0000 C CNN
-F 1 "CONN_SUP" V 1200 1500 50  0000 C CNN
-F 2 "" H 1100 1500 60  0000 C CNN
-F 3 "" H 1100 1500 60  0000 C CNN
-	1    1100 1500
-	-1   0    0    -1  
-$EndComp
-$Comp
-L CONN_01X02 P1
-U 1 1 5544CF50
-P 700 1500
-F 0 "P1" H 700 1650 50  0000 C CNN
-F 1 "CONN_SUP" V 800 1500 50  0000 C CNN
-F 2 "" H 700 1500 60  0000 C CNN
-F 3 "" H 700 1500 60  0000 C CNN
-	1    700  1500
-	-1   0    0    -1  
-$EndComp
 Text Notes 650  1050 0    60   ~ 0
 ingoing and outgoing supply-connector\n--> can be used as a\n      daisy-chain-connector
 Wire Wire Line
@@ -420,7 +398,7 @@ L R_Small R4
 U 1 1 5546920A
 P 3950 6550
 F 0 "R4" H 3980 6570 50  0000 L CNN
-F 1 "1k2" H 3980 6510 50  0000 L CNN
+F 1 "1k2, P=.5W" H 3980 6510 50  0000 L CNN
 F 2 "" H 3950 6550 60  0000 C CNN
 F 3 "" H 3950 6550 60  0000 C CNN
 	1    3950 6550
@@ -494,22 +472,6 @@ Wire Wire Line
 	3650 7050 4100 7050
 Wire Wire Line
 	8500 1300 8500 1700
-Wire Wire Line
-	900  1450 900  1200
-Wire Wire Line
-	900  1200 1300 1200
-Wire Wire Line
-	1300 1200 1300 1450
-Wire Wire Line
-	900  1550 900  1800
-Wire Wire Line
-	900  1800 1300 1800
-Wire Wire Line
-	1300 1800 1300 1550
-Wire Wire Line
-	1300 1450 1750 1450
-Wire Wire Line
-	1300 1550 1750 1550
 $Comp
 L FUSE F1
 U 1 1 5546A38C
@@ -596,9 +558,7 @@ Wire Wire Line
 	2850 1450 3800 1450
 Connection ~ 3050 1450
 Wire Wire Line
-	1750 1550 1750 1850
-Wire Wire Line
-	1750 1850 3800 1850
+	1600 1850 3800 1850
 Wire Wire Line
 	3050 1850 3050 1750
 Connection ~ 2500 1850
@@ -856,6 +816,52 @@ Text Notes 2550 1400 0    60   ~ 0
 5W resistor
 Text Notes 2250 3700 0    60   ~ 0
 connect\nPin 1-2 to 5V-BAK-connector\nPin 3-4 to K1\nPin 5-6 to K2\n
-Text Notes 2300 6550 0    60   ~ 0
-TODO: This LED gets fried (P=.5W)
+$Comp
+L CONN_01X04 P?
+U 1 1 557EEB97
+P 750 1650
+F 0 "P?" H 750 1900 50  0000 C CNN
+F 1 "CONN_SUP" V 850 1650 50  0000 C CNN
+F 2 "" H 750 1650 60  0000 C CNN
+F 3 "" H 750 1650 60  0000 C CNN
+	1    750  1650
+	-1   0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 P?
+U 1 1 557EEBE6
+P 1200 1650
+F 0 "P?" H 1200 1900 50  0000 C CNN
+F 1 "CONN_SUP" V 1300 1650 50  0000 C CNN
+F 2 "" H 1200 1650 60  0000 C CNN
+F 3 "" H 1200 1650 60  0000 C CNN
+	1    1200 1650
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	950  1350 950  1600
+Wire Wire Line
+	950  1700 950  1950
+Wire Wire Line
+	1400 1350 1400 1600
+Wire Wire Line
+	1400 1700 1400 1950
+Wire Wire Line
+	1400 1950 950  1950
+Connection ~ 1400 1800
+Connection ~ 950  1800
+Wire Wire Line
+	1600 1850 1600 1800
+Wire Wire Line
+	1600 1800 1400 1800
+Wire Wire Line
+	950  1350 1400 1350
+Connection ~ 1400 1500
+Connection ~ 950  1500
+Wire Wire Line
+	1750 1450 1600 1450
+Wire Wire Line
+	1600 1450 1600 1500
+Wire Wire Line
+	1600 1500 1400 1500
 $EndSCHEMATC
