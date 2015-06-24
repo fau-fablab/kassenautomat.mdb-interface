@@ -101,7 +101,7 @@ void task_hopper(void) {
 	// how many ticks should the execution of the statemachine be paused (e.g. to wait for IO to settle)
 	// this saves us a lot of intermediate "do nothing and wait" states
 		
-	static uint16_t hopperPause=100*TICKS_PER_MS; // at the very first start, wait 100ms so that there are no error reports during startup
+	static uint16_t hopperPause=TICKS_PER_S/10; // at the very first start, wait 100ms so that there are no error reports during startup
 	static uint16_t hopperTimeout=0; // state-specific counter to wait for some event (the statemachine is still executed each time)
 	
 	if (hopperError != HOPPER_OKAY) {
@@ -133,7 +133,7 @@ void task_hopper(void) {
 			hopperState=HOPPER_STATE_CHECK_SENSOR_1;
 			hopperMotor(0);
 			hopperOptoSupply(0);
-			hopperPause=10*TICKS_PER_MS;
+			hopperPause=TICKS_PER_S/100; // 10ms
 			break;
 		case HOPPER_STATE_CHECK_SENSOR_1:
 			// check if sensor high (= pullup okay)
@@ -145,7 +145,7 @@ void task_hopper(void) {
  			hopperState=HOPPER_STATE_CHECK_SENSOR_2;
 			hopperTimeout=0;
 			hopperOptoSupply(1);
-			hopperPause=10*TICKS_PER_MS;
+			hopperPause=TICKS_PER_S/100; // 10ms
 			break;
 		case HOPPER_STATE_CHECK_SENSOR_2:
 			// sensor should report "no coin" for 250ms before a payout is allowed
@@ -153,7 +153,7 @@ void task_hopper(void) {
 				hopperError=HOPPER_ERR_SENSOR2;
 				return;
 			}
-			if (hopperTimeout < 250*TICKS_PER_MS) {
+			if (hopperTimeout < TICKS_PER_S/4) { // 250ms
 				// wait until time has elapsed
 				hopperTimeout++;
 				break;
@@ -161,10 +161,11 @@ void task_hopper(void) {
 			if (hopperDoDispense) {
 				hopperMotor(1);
 				// after 3ms of undefined state, no coin may be present for 25ms.
-				hopperPause=3*TICKS_PER_MS; // Datasheet: "Tu"
-				hopperTimeout=25*TICKS_PER_MS; // Datasheet: "Tn"
+				hopperPause=3*TICKS_PER_S/1000; // 3ms - Datasheet: "Tu"
+				hopperTimeout=TICKS_PER_S/40; // 25ms Datasheet: "Tn"
 				hopperState=HOPPER_STATE_DISPENSE_START;
 			}
+			break;
 		case HOPPER_STATE_DISPENSE_START:
 			// start of dispensing
 			// no coin may be detected yet
@@ -180,6 +181,7 @@ void task_hopper(void) {
 				hopperState=HOPPER_STATE_DISPENSE_MIDDLE;
 				hopperTimeout=0;
 			}
+			break;
 		case HOPPER_STATE_DISPENSE_MIDDLE:
 			// middle of dispensing - expect coin
 			hopperTimeout++;
@@ -187,18 +189,18 @@ void task_hopper(void) {
 			if (hopperCoinPresent()) {
 				// coin found!
 				// after 1ms of undefined state (debounce), "coin present" must be on for at least 5ms
-				hopperPause=1*TICKS_PER_MS;
+				hopperPause=TICKS_PER_S/1000; // 1ms
 				hopperState=HOPPER_STATE_DISPENSE_DETECTED_COIN;
 				hopperTimeout=0;
-			} else if (hopperTimeout < 800*TICKS_PER_MS) {
+			} else if (hopperTimeout < 8*(TICKS_PER_S/10)) { // 800ms
 				// wait for coin...
-			} else if (hopperTimeout == 800*TICKS_PER_MS) {
+			} else if (hopperTimeout == 8*(TICKS_PER_S/10)) { // 800ms
 				// we waited for a coin at least 800ms
 				// then turn off motor
 				hopperMotor(0);
 				// ignore signals for 1ms against EMI trouble
-				hopperPause=1*TICKS_PER_MS;
-			} else if (hopperTimeout < 1000*TICKS_PER_MS) {
+				hopperPause=TICKS_PER_S/1000; // 1ms
+			} else if (hopperTimeout < TICKS_PER_S) { // 1s
 				// wait until motor has fully stopped rotating.
 				// note that exactly at or shortly after turning off the motor a coin could be flying out, therfore this wait state.
 			} else {
@@ -217,12 +219,12 @@ void task_hopper(void) {
 				hopperError=HOPPER_ERR_SHORT_COIN_IMPULSE;
 				return;
 			}
-			if (hopperTimeout < 5*TICKS_PER_MS) {
+			if (hopperTimeout < 5*TICKS_PER_S/1000) { // 5ms
 				hopperTimeout++;
 			} else {
 #warning adjust Td to our hopper disk color
 				const uint8_t MOTOR_DELAY_TIME = 10; // "Td" delay time from datasheet: how long does the motor need to stay on *after* detecting a coin (time from sensor rising edge to motor turn-off)
-				hopperPause=(MOTOR_DELAY_TIME-1-5)*TICKS_PER_MS; // "Td" delay time from datasheet, minus the 1 ms debouncing time from previous state minus the time in this state
+				hopperPause=(MOTOR_DELAY_TIME-1-5)*TICKS_PER_S/1000; // "Td" delay time from datasheet, minus the 1 ms debouncing time from previous state minus the time in this state
 				hopperState=HOPPER_STATE_DISPENSE_SUCCESS_FINISH;
 			}
 			break;
@@ -230,7 +232,7 @@ void task_hopper(void) {
 			// switch off motor, report success
 			hopperMotor(0);
 			hopperResponse=HOPPER_RESPONSE_SUCCESS;
-			hopperPause=200*TICKS_PER_MS; // ignore coin output for 200ms
+			hopperPause=2*(TICKS_PER_S/10); // ignore coin output for 200ms
 			// TODO this does not detect double payouts
 			hopperState=HOPPER_STATE_COOLDOWN;
 			break;
@@ -240,13 +242,15 @@ void task_hopper(void) {
 				hopperError=HOPPER_ERR_UNEXPECTED_COIN_AT_COOLDOWN;
 				return;
 			}
-			if (hopperTimeout < (800-250)*TICKS_PER_MS) {
+			if (hopperTimeout < (800-250)*(TICKS_PER_S/1000)) { // TODO rough approximation of time because of integer truncation of TICKS_PER_S
 				hopperTimeout++;
 			} else {
 				hopperTimeout=0;
 				hopperState=HOPPER_STATE_INIT;
 			}
+			break;
 		default:
 			FATAL("unknown hopper state");
+			break;
 	}
 }

@@ -346,7 +346,7 @@ void task_rgb_led(void) {
 	
 	const uint8_t TIMEOUT_SECONDS = 20; // how many seconds until fadeout?
 	
-	const uint32_t FADEOUT_START= TIMEOUT_SECONDS * 1000 * TICKS_PER_MS;
+	const uint32_t FADEOUT_START= TIMEOUT_SECONDS * (uint32_t)TICKS_PER_S;
 	
 	for (uint8_t index=0; index <= 1; index++) {
 		uint8_t alpha=255;
