@@ -340,48 +340,51 @@ rgb_mode_enum asciiToRGBMode(uint8_t x) {
 }
 
 void task_rgb_led(void) {
-	// slow down blinking / fadeout by 2^n. n=0 means 255/TICKS_PER_MS = 40 milliseconds 
-	const uint8_t BLINK_FREQUENCY_DIVIDER=4;
-	const uint8_t TIMEOUT_FADEOUT_DIVIDER=5;
+	// slow down blinking / fadeout by 2^(n+1). n=0 means 2*255/TICKS_PER_MS = 80 milliseconds 
+	const uint8_t BLINK_FREQUENCY_DIVIDER=3;
+	const uint8_t TIMEOUT_FADEOUT_DIVIDER=4;
 	
 	const uint8_t TIMEOUT_SECONDS = 20; // how many seconds until fadeout?
 	
 	const uint32_t FADEOUT_START= TIMEOUT_SECONDS * (uint32_t)TICKS_PER_S;
 	
-	for (uint8_t index=0; index <= 1; index++) {
-		uint8_t alpha=255;
-		switch (rgb_led_mode[index]) {
-			case CONSTANT:
-				alpha=255;
-				break;
-			case BLINK:
+	// save CPU time by only processing one RGB channel per task call
+	// this slows down the LED update rate by factor 2
+	static uint8_t index = 0;
+	index = !index;
+	uint8_t alpha=255;
+	
+	switch (rgb_led_mode[index]) {
+		case CONSTANT:
+			alpha=255;
+			break;
+		case BLINK:
+			rgb_led_timer[index]++;
+			if (rgb_led_timer[index] < (256 << BLINK_FREQUENCY_DIVIDER)) {
+				alpha=rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER;
+			} else {
+				alpha=255-(rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER);
+			}
+			if (rgb_led_timer[index] >= ((255+256) << BLINK_FREQUENCY_DIVIDER)) {
+				rgb_led_timer[index]=0;
+			}
+			break;
+		case TIMEOUT:
+			if (rgb_led_timer[index] < FADEOUT_START) {
+				// phase 1: stay on fully
 				rgb_led_timer[index]++;
-				if (rgb_led_timer[index] < (256 << BLINK_FREQUENCY_DIVIDER)) {
-					alpha=rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER;
-				} else {
-					alpha=255-(rgb_led_timer[index]>>BLINK_FREQUENCY_DIVIDER);
-				}
-				if (rgb_led_timer[index] >= ((255+256) << BLINK_FREQUENCY_DIVIDER)) {
-					rgb_led_timer[index]=0;
-				}
-				break;
-			case TIMEOUT:
-				if (rgb_led_timer[index] < FADEOUT_START) {
-					// phase 1: stay on fully
-					rgb_led_timer[index]++;
-					alpha = 255;
-				} else if (rgb_led_timer[index] < FADEOUT_START + (255 << TIMEOUT_FADEOUT_DIVIDER)) {
-					// phase 2: slowly fade to black
-					rgb_led_timer[index]++;
-					alpha = 255 - ((rgb_led_timer[index] - FADEOUT_START) >> TIMEOUT_FADEOUT_DIVIDER);
-				} else {
-					// phase 3: stay off
-					alpha = 0;
-				}
-				break;
-		}
-		rgb_set_pwm(index, rgb_led_red[index], rgb_led_green[index], rgb_led_blue[index], alpha);
+				alpha = 255;
+			} else if (rgb_led_timer[index] < FADEOUT_START + (255 << TIMEOUT_FADEOUT_DIVIDER)) {
+				// phase 2: slowly fade to black
+				rgb_led_timer[index]++;
+				alpha = 255 - ((rgb_led_timer[index] - FADEOUT_START) >> TIMEOUT_FADEOUT_DIVIDER);
+			} else {
+				// phase 3: stay off
+				alpha = 0;
+			}
+			break;
 	}
+	rgb_set_pwm(index, rgb_led_red[index], rgb_led_green[index], rgb_led_blue[index], alpha);
 }
 
 
