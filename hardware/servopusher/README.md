@@ -9,3 +9,7 @@ After triggering the switch, the microcontroller deactivates the interrupts and 
 Upon arrival the system starts the return to position 0. Position 0 does not push the lever while position 1 does.
 
 The outside momentary switch is a vandalism safe one with an LED ring. The system could flash the LED ring as a "DONE"-indicator. 
+
+arduinodruecker
+^^^^^^^^^^^^^^^
+In order to get things done, I have quickly scrambled an Arduino together. The ino-file is in arduinodruecker and self-explinatory.
