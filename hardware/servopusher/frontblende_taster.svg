@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="frontblende_taster.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="22.464558"
+     inkscape:cy="923.05163"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="721"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:Sans"
+       x="146.47212"
+       y="255.16908"
+       id="text2991"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2993"
+         x="146.47212"
+         y="255.16908"
+         style="font-size:20px;fill:#0000ff;fill-opacity:1">Stärke: 3mm</tspan></text>
+    <rect
+       style="fill:none;stroke:#ff0000;stroke-width:0.09995592;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect2985"
+       width="283.33963"
+       height="283.33963"
+       x="3.0325513"
+       y="4.1383128"
+       rx="17.708727"
+       ry="17.708727" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
+       x="143.76486"
+       y="52.372078"
+       id="text3765"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3767"
+         x="143.76486"
+         y="52.372078">Rückgabe</tspan><tspan
+         sodipodi:role="line"
+         x="143.76486"
+         y="102.37209"
+         id="tspan3769">Münzen</tspan></text>
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path3771"
+       sodipodi:cx="154.55334"
+       sodipodi:cy="181.61069"
+       sodipodi:rx="6.0609155"
+       sodipodi:ry="12.121831"
+       d="m 160.61426,181.61069 a 6.0609155,12.121831 0 1 1 -12.12183,0 6.0609155,12.121831 0 1 1 12.12183,0 z"
+       transform="matrix(0.86660971,0,0,0.43327733,-93.762667,-37.4076)" />
+    <path
+       transform="matrix(0.86660971,0,0,0.43327733,115.29254,-37.4076)"
+       d="m 160.61426,181.61069 a 6.0609155,12.121831 0 1 1 -12.12183,0 6.0609155,12.121831 0 1 1 12.12183,0 z"
+       sodipodi:ry="12.121831"
+       sodipodi:rx="6.0609155"
+       sodipodi:cy="181.61069"
+       sodipodi:cx="154.55334"
+       id="path3773"
+       style="fill:none;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:type="arc" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path3775"
+       sodipodi:cx="154.55334"
+       sodipodi:cy="181.61069"
+       sodipodi:rx="6.0609155"
+       sodipodi:ry="12.121831"
+       d="m 160.61426,181.61069 a 6.0609155,12.121831 0 1 1 -12.12183,0 6.0609155,12.121831 0 1 1 12.12183,0 z"
+       transform="matrix(0.86660971,0,0,0.43327733,115.29254,171.64827)" />
+    <path
+       transform="matrix(0.86660971,0,0,0.43327733,-93.762667,171.64827)"
+       d="m 160.61426,181.61069 a 6.0609155,12.121831 0 1 1 -12.12183,0 6.0609155,12.121831 0 1 1 12.12183,0 z"
+       sodipodi:ry="12.121831"
+       sodipodi:rx="6.0609155"
+       sodipodi:cy="181.61069"
+       sodipodi:cx="154.55334"
+       id="path3777"
+       style="fill:none;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:type="arc" />
+    <path
+       transform="matrix(1.1668252,0,0,1.1668252,-181.78963,-150.9423)"
+       d="m 304.05592,263.43304 a 24.243662,24.243662 0 1 1 -48.48733,0 24.243662,24.243662 0 1 1 48.48733,0 z"
+       sodipodi:ry="24.243662"
+       sodipodi:rx="24.243662"
+       sodipodi:cy="263.43304"
+       sodipodi:cx="279.81226"
+       id="path3003"
+       style="fill:none;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:type="arc" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3773"
+       y="212.98633"
+       x="143.76486"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
+       xml:space="preserve"><tspan
+         id="tspan3777"
+         y="212.98633"
+         x="143.76486"
+         sodipodi:role="line"
+         style="font-size:10px">Drücken, falls Münzautomat blockiert ist!</tspan><tspan
+         y="225.48633"
+         x="143.76486"
+         sodipodi:role="line"
+         style="font-size:10px"
+         id="tspan3783">Press for unblocking the coin-operated machine.</tspan></text>
+  </g>
+</svg>
