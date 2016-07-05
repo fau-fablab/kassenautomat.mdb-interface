@@ -5,7 +5,7 @@ Servo myservo;  // create servo object to control a servo
                // a maximum of eight servo objects can be created
 
 int pos_wait = 0; // where should the servo start?
-int pos_press = 180; // till where should the servo turn? minus for other direction
+int pos_press = 90; // till where should the servo turn? minus for other direction
 int wait = 2000; // how long should the servo wait in the end positions
 int button = 7;  // The button is connected to PIN 7
 int led = 5; // The LED in the button is connected to PIN 5
