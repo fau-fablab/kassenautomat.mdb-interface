@@ -411,6 +411,8 @@ void sleep_remaining_time(void) {
 
 int main(void) {
 	const uint8_t TEST=0;
+    uint8_t mcusr_copy = MCUSR;
+    MCUSR = 0;
 	if (!TEST) {
 		wdt_enable(WDTO_120MS);
 	}
@@ -454,11 +456,25 @@ int main(void) {
 		}
 	}
 	
-	uartPC_tx_pstr(PSTR("INFO:booting\n"));   
-	
-	init_timer();
-	
-        while(1) {
+	uartPC_tx_pstr(PSTR("INFO:booting."));
+	if (mcusr_copy & (1<<JTRF)) {
+        uartPC_tx_pstr(PSTR("(JTAG reset)"));
+    }
+    if (mcusr_copy & (1<<WDRF)) {
+        uartPC_tx_pstr(PSTR("(Watchdog or previous fatal error)"));
+    }
+	if (mcusr_copy & (1<<BORF)) {
+        uartPC_tx_pstr(PSTR("(Brownout)"));
+    }
+    if (mcusr_copy & (1<<EXTRF)) {
+        uartPC_tx_pstr(PSTR("(external reset)"));
+    }
+    if (mcusr_copy & (1<<PORF)) {
+        uartPC_tx_pstr(PSTR("(power-on)"));
+    }
+    uartPC_tx_blocking('\n');
+    init_timer(); // reset timer to prevent overrun at first loop
+	while(1) {
 		wdt_reset();
                 // ATTENTION, no delays allowed in this loop.
 		// fixed loop runtime is (0xFF * timer1 prescaler)/F_CPU = 170µs with prescaler=8 and F_CPU=12MHz

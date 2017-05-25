@@ -330,8 +330,8 @@ program: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
 
-fuse: # external clock, 4.3V Brownout, no bootloader
-	$(AVRDUDE) $(AVRDUDE_FLAGS) -u -U lfuse:w:0xe0:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
+fuse: # external clock, 2.7V Brownout, no bootloader
+	$(AVRDUDE) $(AVRDUDE_FLAGS) -u -U lfuse:w:0xe0:m -U hfuse:w:0xd9:m -U efuse:w:0xfd:m
 
 
 
